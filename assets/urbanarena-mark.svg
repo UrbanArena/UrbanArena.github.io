@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">UrbanArena mark</title>
+  <desc id="desc">A colourful city skyline above a curved urban route.</desc>
+  <defs>
+    <linearGradient id="road" x1="18" y1="77" x2="80" y2="63" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2ea894"/><stop offset=".52" stop-color="#8156d6"/><stop offset="1" stop-color="#295a83"/>
+    </linearGradient>
+  </defs>
+  <path d="M14 80c12-17 25-18 38-10s21 5 30-6" fill="none" stroke="url(#road)" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="14" cy="80" r="5" fill="#e65d73" stroke="#fffdfa" stroke-width="3"/>
+  <circle cx="82" cy="64" r="5" fill="#295a83" stroke="#fffdfa" stroke-width="3"/>
+  <path d="M22 67V39h15v28" fill="#ed993c"/>
+  <path d="M39 67V20h18v47" fill="#2ea894"/>
+  <path d="M59 67V31h16v36" fill="#8156d6"/>
+  <path d="m44 20 4-9 4 9" fill="#e65d73"/>
+  <path d="M27 45h5M27 53h5M44 29h7M44 39h7M44 49h7M64 40h6M64 49h6" stroke="#fffdfa" stroke-width="3" stroke-linecap="round" opacity=".86"/>
+</svg>
