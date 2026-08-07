@@ -3,14 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f0e7">
+  <meta name="theme-color" content="#ffffff">
   <meta name="description" content="UrbanArena is a real-scale urban sandbox and benchmark for evaluating multimodal agents through physically grounded exploration of Hong Kong.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="UrbanArena — Real-Scale Urban Exploration for MLLM Agents">
   <meta property="og:description" content="A physically interactive digital replica of Hong Kong for evaluating multimodal agents from local understanding to long-horizon urban agency.">
   <meta property="og:url" content="https://urbanarena.github.io/">
+  <meta property="og:image" content="https://urbanarena.github.io/assets/figure-1.jpg">
   <title>UrbanArena — Real-Scale Urban Exploration for MLLM Agents</title>
-  <link rel="icon" href="assets/urbanarena-mark.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/urbanarena-favicon.png" type="image/png">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
@@ -18,276 +19,154 @@
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header" data-header>
-    <div class="shell nav-shell">
-      <a class="nav-brand" href="#top" aria-label="UrbanArena home">
-        <img src="assets/urbanarena-mark.svg" alt="" width="34" height="34">
-        <span class="wordmark wordmark--nav" aria-label="UrbanArena">
-          <span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span>
-        </span>
+    <div class="shell header-inner">
+      <a class="brand" href="#top" aria-label="UrbanArena home">
+        <img src="assets/urbanarena-icon.png" alt="" width="22" height="28">
+        <span class="wordmark" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span>
       </a>
 
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
-        <span></span><span></span><span></span>
-        <span class="sr-only">Toggle navigation</span>
+        <span></span><span></span><span></span><span class="sr-only">Toggle navigation</span>
       </button>
 
       <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
-        <a href="#overview">Overview</a>
-        <a href="#benchmark">UrbanBench</a>
-        <a href="#protocol">Protocol</a>
-        <a href="#publication">Publication</a>
-        <a class="nav-code" href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">
-          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 .7a11.5 11.5 0 0 0-3.64 22.42c.58.1.79-.25.79-.56v-2.24c-3.22.7-3.9-1.37-3.9-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.72 1.27 3.38.97.1-.75.4-1.27.74-1.56-2.57-.29-5.27-1.28-5.27-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.16 1.18A10.96 10.96 0 0 1 12 6.17c.98 0 1.95.13 2.87.39 2.2-1.49 3.16-1.18 3.16-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.71 5.38-5.29 5.67.42.36.78 1.07.78 2.16v3.23c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .7Z"/></svg>
-          <span>Code</span>
-        </a>
+        <a href="#urbanarena">UrbanArena</a>
+        <a href="#simulation">Simulation</a>
+        <a href="#urbanbench">UrbanBench</a>
+        <a href="#publication">Paper</a>
+        <a href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">Code</a>
       </nav>
     </div>
   </header>
 
   <main id="main">
     <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="hero-atmosphere" aria-hidden="true">
-        <div class="sun-glow"></div>
-        <div class="contour contour-a"></div>
-        <div class="contour contour-b"></div>
-      </div>
+      <div class="shell hero-copy">
+        <p class="report-label">Technical Report <span>2026</span></p>
 
-      <div class="shell hero-grid">
-        <div class="hero-copy reveal">
-          <p class="eyebrow"><span>Technical report</span><span class="eyebrow-rule"></span><span>2026</span></p>
-          <h1 class="hero-wordmark wordmark" id="hero-title" aria-label="UrbanArena">
-            <span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span>
+        <div class="title-row">
+          <img class="title-icon" src="assets/urbanarena-icon.png" alt="UrbanArena title emblem" width="62" height="78">
+          <h1 id="hero-title">
+            <span class="wordmark wordmark--hero" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span><span class="title-colon">:</span>
+            <span class="paper-title">Evaluating MLLM Agents through Real-Scale Urban Exploration</span>
           </h1>
-          <p class="hero-kicker">Evaluating MLLM Agents through <br>Real-Scale Urban Exploration</p>
-          <p class="hero-lede">
-            A territory-scale, physically grounded digital replica of Hong Kong where multimodal agents must perceive, navigate, plan, and adapt as a city changes around them.
-          </p>
-
-          <div class="hero-actions" aria-label="Project links">
-            <a class="button button--primary" href="#overview">
-              <span>Explore UrbanArena</span><span aria-hidden="true">↓</span>
-            </a>
-            <a class="button button--paper" href="#publication">
-              <span class="button-icon paper-icon" aria-hidden="true"></span>
-              <span>Paper</span><span class="status-dot">soon</span>
-            </a>
-            <a class="button button--ghost" href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 .7a11.5 11.5 0 0 0-3.64 22.42c.58.1.79-.25.79-.56v-2.24c-3.22.7-3.9-1.37-3.9-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.72 1.27 3.38.97.1-.75.4-1.27.74-1.56-2.57-.29-5.27-1.28-5.27-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.16 1.18A10.96 10.96 0 0 1 12 6.17c.98 0 1.95.13 2.87.39 2.2-1.49 3.16-1.18 3.16-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.71 5.38-5.29 5.67.42.36.78 1.07.78 2.16v3.23c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .7Z"/></svg>
-              <span>Code</span><span class="status-dot">soon</span>
-            </a>
-          </div>
-
-          <p class="hero-affiliations">NUS · Shanghai Jiao Tong University · Meituan · CUHK · University of Oxford</p>
         </div>
 
-        <div class="hero-stage reveal" data-delay="120" data-scene="dusk" aria-label="Illustrative UrbanArena city-state interface">
-          <div class="stage-chrome">
-            <div class="stage-title">
-              <span class="live-dot"></span>
-              <span>HONG KONG · LIVE CITY STATE</span>
-            </div>
-            <div class="stage-coordinates">22.3193° N · 114.1694° E</div>
-          </div>
+        <p class="abstract-lede">A real-scale urban sandbox that turns territory-wide 3D geospatial data of Hong Kong into a continuously rendered and physically grounded environment for multimodal agents.</p>
 
-          <div class="city-viewport">
-            <svg class="city-map" viewBox="0 0 720 560" role="img" aria-label="Stylized urban map with an agent route">
-              <defs>
-                <linearGradient id="waterGradient" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#dcebe8"/><stop offset="1" stop-color="#bfd8dc"/>
-                </linearGradient>
-                <filter id="routeGlow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
-              </defs>
-              <path class="water" d="M-20 401C118 339 205 392 296 350c97-45 120-102 229-98 93 3 143 45 219 26v302H-20Z" fill="url(#waterGradient)"/>
-              <g class="districts">
-                <path d="M25 36h278l63 84-35 157-88 54-166-26-52-112Z"/>
-                <path d="m387 37 258 8 48 91-37 94-126 11-92-48-73-74Z"/>
-                <path d="m55 334 167 20 85 67-15 100H75L22 432Z"/>
-                <path d="m329 305 117-45 108 22 105 75 4 154H342l-44-84Z"/>
-              </g>
-              <g class="minor-roads">
-                <path d="M61 68 310 290M128 39l-8 268M229 37l-64 289M29 165l298-26M27 245l288-42"/>
-                <path d="m397 72 243 133M461 42l-53 181M570 43l-36 190M376 125l290-5M411 185l220-93"/>
-                <path d="m50 378 233 81M111 342l-18 173M202 356l-44 165M39 437l254-38"/>
-                <path d="m342 346 276 128M390 292l-12 213M498 277l-52 231M600 320l-46 188M321 411l324-66"/>
-              </g>
-              <g class="major-roads">
-                <path d="M63 282C190 237 273 253 353 329s187 98 296 64"/>
-                <path d="M326 49c24 112 2 184-32 258s-19 143 36 207"/>
-                <path d="M85 100c155 67 270 70 378 36s151-28 206 30"/>
-              </g>
-              <g class="buildings">
-                <rect x="64" y="79" width="42" height="31" rx="3"/><rect x="145" y="87" width="55" height="42" rx="3"/>
-                <rect x="222" y="61" width="46" height="52" rx="3"/><rect x="77" y="181" width="57" height="37" rx="3"/>
-                <rect x="169" y="171" width="39" height="54" rx="3"/><rect x="244" y="152" width="60" height="35" rx="3"/>
-                <rect x="413" y="75" width="49" height="38" rx="3"/><rect x="503" y="67" width="59" height="45" rx="3"/>
-                <rect x="588" y="135" width="45" height="49" rx="3"/><rect x="458" y="157" width="52" height="37" rx="3"/>
-                <rect x="82" y="371" width="51" height="45" rx="3"/><rect x="176" y="395" width="65" height="38" rx="3"/>
-                <rect x="371" y="336" width="47" height="43" rx="3"/><rect x="452" y="382" width="63" height="48" rx="3"/>
-                <rect x="554" y="353" width="51" height="40" rx="3"/><rect x="571" y="445" width="57" height="38" rx="3"/>
-              </g>
-              <path class="agent-route route-shadow" d="M117 425C121 361 163 325 231 315s89-49 86-94 31-75 92-72 92 39 120 84 72 54 121 19"/>
-              <path class="agent-route route-line" d="M117 425C121 361 163 325 231 315s89-49 86-94 31-75 92-72 92 39 120 84 72 54 121 19"/>
-              <g class="route-node start-node" transform="translate(117 425)"><circle r="12"/><circle r="4"/></g>
-              <g class="route-node agent-node" transform="translate(409 149)" filter="url(#routeGlow)"><circle r="15"/><path d="m0-7 6 14-6-3-6 3Z"/></g>
-              <g class="route-node goal-node" transform="translate(650 252)"><circle r="13"/><path d="M-4-6h8v8l-4 5-4-5Z"/></g>
-            </svg>
+        <p class="authors">Tianjie Ju<sup>1,2,3</sup>, Yueqing Sun<sup>3</sup>, Zheng Wu<sup>2</sup>, Yuhan Cui<sup>4</sup>, Bobo Li<sup>1</sup>, Pengzhou Cheng<sup>2</sup>, Haodong Zhao<sup>2</sup>, Xinbei Ma<sup>2</sup>, Qi Gu<sup>3</sup>, Hao Fei<sup>5</sup>, Zhuosheng Zhang<sup>2</sup></p>
 
-            <div class="rain-layer" aria-hidden="true"></div>
-            <div class="pedestrian-cluster" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="project-links" aria-label="Project links">
+          <a class="link-button link-button--dark" href="#publication">Paper <span>coming soon</span></a>
+          <a class="link-button" href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">Code <span>coming soon</span></a>
+        </div>
 
-            <div class="scene-status scene-status--top">
-              <span class="status-label">Episode</span><strong>Live</strong>
-            </div>
-            <div class="scene-status scene-status--bottom">
-              <div><span class="status-label">Clock</span><strong data-clock>18:40</strong></div>
-              <div><span class="status-label">Weather</span><strong data-weather>Dusk</strong></div>
-              <div><span class="status-label">Mode</span><strong>First person</strong></div>
-            </div>
-          </div>
-
-          <div class="scene-switcher" aria-label="Preview environmental controls">
-            <span>City state</span>
-            <div role="group" aria-label="Select a preview state">
-              <button type="button" data-set-scene="day">Day</button>
-              <button type="button" data-set-scene="dusk" class="is-active">Dusk</button>
-              <button type="button" data-set-scene="rain">Rain</button>
-              <button type="button" data-set-scene="night">Night</button>
-            </div>
-          </div>
+        <div class="institution-logos" aria-label="Affiliated institutions">
+          <div class="institution"><img class="logo-nus" src="assets/nus.png" alt="National University of Singapore"></div>
+          <div class="institution"><img class="logo-sjtu" src="assets/sjtu.png" alt="Shanghai Jiao Tong University"></div>
+          <div class="institution"><img class="logo-longcat" src="assets/longcat.png" alt="LongCat by Meituan"></div>
+          <div class="institution"><img class="logo-cuhk" src="assets/cuhk.png" alt="The Chinese University of Hong Kong"></div>
+          <div class="institution"><img class="logo-oxford" src="assets/oxford.jpeg" alt="University of Oxford"></div>
         </div>
       </div>
 
-      <div class="shell hero-facts reveal" data-delay="220" aria-label="Project facts">
-        <div><strong>Real-scale</strong><span>Hong Kong geography</span></div>
-        <div><strong>13</strong><span>manually verified task types</span></div>
-        <div><strong>5 levels</strong><span>from perception to adaptation</span></div>
-        <div><strong>Closed loop</strong><span>perception, action, and map use</span></div>
+      <figure class="shell paper-figure hero-figure" id="urbanarena">
+        <img src="assets/figure-1.jpg" alt="UrbanArena overview showing street-level scenes, free first-person navigation, global map exploration, and aerial city views of Hong Kong" width="1938" height="1145">
+        <figcaption><strong>Figure 1.</strong> UrbanArena transforms territory-wide 3D geospatial data into a physically grounded digital replica of Hong Kong. Agents operate through first-person control while using a georeferenced global map.</figcaption>
+      </figure>
+
+      <div class="shell contribution-line" aria-label="Project summary">
+        <div><strong>Real scale</strong><span>Hong Kong geography</span></div>
+        <div><strong>Closed loop</strong><span>Vision, action, and map use</span></div>
+        <div><strong>Dynamic</strong><span>Time, weather, and pedestrians</span></div>
       </div>
     </section>
 
-    <section class="section section--paper" id="overview" aria-labelledby="overview-title">
-      <div class="shell two-column">
-        <div class="section-heading reveal">
-          <p class="section-index">01 · UrbanArena</p>
-          <h2 id="overview-title">A city that behaves<br>like a city.</h2>
-          <p class="section-intro">UrbanArena turns official territory-wide 3D geospatial resources into a continuously rendered world an agent can physically inhabit.</p>
-        </div>
-
-        <div class="overview-body reveal" data-delay="90">
-          <p class="dropcap">Cities test more than visual recognition. Street appearance, road topology, physical accessibility, time, weather, and moving people all refer to the same geographic system. An agent must keep those views aligned while acting over long horizons.</p>
-          <p>UrbanArena streams georegistered 3D Tiles into Unity and aligns them with Hong Kong's pedestrian network. A model-agnostic interface exposes first-person perception, physical control, and map interaction without privileged coordinates or simulator state.</p>
-
-          <div class="layer-stack" aria-label="UrbanArena system layers">
-            <article class="layer-card">
-              <span class="layer-number">01</span>
-              <div><h3>Geographic foundation</h3><p>Territory-scale 3D city assets and a pedestrian network remain registered to the same real-world coordinates.</p></div>
-              <span class="layer-swatch swatch-coral"></span>
-            </article>
-            <article class="layer-card">
-              <span class="layer-number">02</span>
-              <div><h3>Interactive embodiment</h3><p>First-person vision, physical movement, and an overhead map form one closed-loop action space.</p></div>
-              <span class="layer-swatch swatch-teal"></span>
-            </article>
-            <article class="layer-card">
-              <span class="layer-number">03</span>
-              <div><h3>Living conditions</h3><p>Clock, illumination, weather, road closures, and pedestrians alter an episode without changing its geography.</p></div>
-              <span class="layer-swatch swatch-violet"></span>
-            </article>
-          </div>
-
-          <p class="source-note">Built with the <a href="https://data.gov.hk/en-data/dataset/hk-landsd-openmap-3d-visualisation-map-tile-based-models" target="_blank" rel="noreferrer">3D Visualisation Map</a> and <a href="https://data.gov.hk/en-data/dataset/hk-landsd-openmap-3d-pedestrian-network" target="_blank" rel="noreferrer">3D Pedestrian Network</a> released by the Lands Department of the Government of the Hong Kong SAR.</p>
+    <section class="section simulation" id="simulation" aria-labelledby="simulation-title">
+      <div class="shell section-heading">
+        <p class="section-number">02</p>
+        <div>
+          <p class="section-kicker">Dynamic simulation</p>
+          <h2 id="simulation-title">One city, nine conditions.</h2>
+          <p>Figure 2 separates the dynamic simulation into nine directly comparable views. Select a condition to inspect the original panel from the paper.</p>
         </div>
       </div>
-    </section>
 
-    <section class="section section--bench" id="benchmark" aria-labelledby="benchmark-title">
-      <div class="shell">
-        <div class="section-heading section-heading--wide reveal">
-          <p class="section-index">02 · UrbanBench</p>
-          <div>
-            <h2 id="benchmark-title">Urban agency,<br>level by level.</h2>
-            <p class="section-intro">Thirteen task types trace a deliberate progression from local understanding to explicit navigation, implicit goals, multi-stop planning, and replanning in a changing city.</p>
+      <div class="shell figure-explorer" data-figure-explorer>
+        <div class="figure-groups" role="group" aria-label="Select a Figure 2 panel">
+          <div class="figure-group">
+            <span class="group-label">Time of day</span>
+            <div class="button-row">
+              <button class="figure-button is-active" type="button" aria-pressed="true" data-figure-src="assets/day.jpg" data-figure-title="Day" data-figure-caption="The same Hong Kong viewpoint under clear daytime illumination.">Day</button>
+              <button class="figure-button" type="button" aria-pressed="false" data-figure-src="assets/dusk.jpg" data-figure-title="Dusk" data-figure-caption="The simulator advances the clock and updates the sky, ambient light, and shadows.">Dusk</button>
+              <button class="figure-button" type="button" aria-pressed="false" data-figure-src="assets/night.jpg" data-figure-title="Night" data-figure-caption="Night changes visibility and activates a substantially darker observation regime.">Night</button>
+            </div>
+          </div>
+
+          <div class="figure-group">
+            <span class="group-label">Weather</span>
+            <div class="button-row">
+              <button class="figure-button" type="button" aria-pressed="false" data-figure-src="assets/sunny.jpg" data-figure-title="Sunny" data-figure-caption="A clear baseline for controlled comparisons of weather-dependent navigation.">Sunny</button>
+              <button class="figure-button" type="button" aria-pressed="false" data-figure-src="assets/cloudy.jpg" data-figure-title="Cloudy" data-figure-caption="Cloud cover alters illumination while preserving the underlying location and geometry.">Cloudy</button>
+              <button class="figure-button" type="button" aria-pressed="false" data-figure-src="assets/heavy-rain.jpg" data-figure-title="Heavy Rain" data-figure-caption="Rain changes visibility and exposes whether a trajectory remains suitable under adverse weather.">Heavy Rain</button>
+            </div>
+          </div>
+
+          <div class="figure-group">
+            <span class="group-label">Pedestrian system</span>
+            <div class="button-row">
+              <button class="figure-button" type="button" aria-pressed="false" data-figure-src="assets/pedestrian-map.jpg" data-figure-title="Network Map" data-figure-caption="The georeferenced pedestrian network is registered to the same city coordinate system.">Network Map</button>
+              <button class="figure-button" type="button" aria-pressed="false" data-figure-src="assets/pedestrian-first-person.jpg" data-figure-title="First-Person Network" data-figure-caption="Walkable connections can be inspected from the embodied agent's viewpoint.">First-Person Network</button>
+              <button class="figure-button" type="button" aria-pressed="false" data-figure-src="assets/pedestrian-population.jpg" data-figure-title="Pedestrian Population" data-figure-caption="Animated pedestrians populate the registered network and create dynamic safety constraints.">Pedestrian Population</button>
+            </div>
           </div>
         </div>
 
-        <div class="level-rail" aria-label="Five UrbanBench capability levels">
-          <article class="level-card reveal">
-            <div class="level-top"><span class="level-id">L1</span><span class="level-tone tone-coral"></span></div>
-            <h3>Understand</h3>
-            <p>Read the immediate urban scene and acquire missing evidence through movement.</p>
-            <ul><li><abbr title="Visual Recognition">VR</abbr> Visual recognition</li><li><abbr title="Orientation Understanding">OU</abbr> Orientation</li><li><abbr title="Active Exploration QA">AEQ</abbr> Active exploration QA</li></ul>
-          </article>
-          <article class="level-card reveal" data-delay="60">
-            <div class="level-top"><span class="level-id">L2</span><span class="level-tone tone-orange"></span></div>
-            <h3>Navigate</h3>
-            <p>Translate goals, routes, and instructions into physically valid movement.</p>
-            <ul><li><abbr title="Short-range Goal Navigation">SGN</abbr> Short-range navigation</li><li><abbr title="Long-range Goal Navigation">LGN</abbr> Long-range navigation</li><li><abbr title="Instruction Navigation">IN</abbr> Instruction following</li><li><abbr title="Constrained Navigation">CN</abbr> Constrained navigation</li></ul>
-          </article>
-          <article class="level-card reveal" data-delay="120">
-            <div class="level-top"><span class="level-id">L3</span><span class="level-tone tone-teal"></span></div>
-            <h3>Infer</h3>
-            <p>Discover where to go when the destination is described only by intent or evidence.</p>
-            <ul><li><abbr title="Place Target Search">PTS</abbr> Place search</li><li><abbr title="Implicit Intent Inference">III</abbr> Implicit intent</li></ul>
-          </article>
-          <article class="level-card reveal" data-delay="180">
-            <div class="level-top"><span class="level-id">L4</span><span class="level-tone tone-violet"></span></div>
-            <h3>Plan</h3>
-            <p>Coordinate several destinations while preserving order, timing, and route efficiency.</p>
-            <ul><li><abbr title="Time-window Scheduling">TWS</abbr> Time windows</li><li><abbr title="Multi-stop Planning">MSP</abbr> Multi-stop planning</li></ul>
-          </article>
-          <article class="level-card reveal" data-delay="240">
-            <div class="level-top"><span class="level-id">L5</span><span class="level-tone tone-blue"></span></div>
-            <h3>Adapt</h3>
-            <p>Revise a route when streets close and move safely around dynamic pedestrians.</p>
-            <ul><li><abbr title="Dynamic Closure Replanning">DCR</abbr> Dynamic closure</li><li><abbr title="Navigation among Pedestrians">NP</abbr> Pedestrian navigation</li></ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section--protocol" id="protocol" aria-labelledby="protocol-title">
-      <div class="shell protocol-grid">
-        <div class="protocol-copy reveal">
-          <p class="section-index">03 · Evaluation protocol</p>
-          <h2 id="protocol-title">The model sees what<br>the agent sees.</h2>
-          <p class="section-intro">Every model receives the same first-person observation, task instruction, action schema, and stopping criteria. No hidden position, remaining-distance signal, or privileged simulator state is exposed.</p>
-          <div class="protocol-note">
-            <span>Fixed interaction horizon</span>
-            <strong>100 steps</strong>
-            <p>Each episode records the full action and geographic trajectory for diagnostic analysis.</p>
+        <figure class="selected-figure">
+          <div class="selected-image-wrap">
+            <img src="assets/day.jpg" alt="Figure 2 panel: Day" width="604" height="378" data-selected-image>
           </div>
-        </div>
-
-        <div class="loop-panel reveal" data-delay="100">
-          <div class="loop-center"><img src="assets/urbanarena-mark.svg" alt=""><span>Urban<br>Arena</span></div>
-          <article class="loop-step loop-step--one"><span>01</span><div><h3>Perceive</h3><p>Read the current first-person frame and task state.</p></div></article>
-          <article class="loop-step loop-step--two"><span>02</span><div><h3>Reason</h3><p>Ground instructions, landmarks, and map context.</p></div></article>
-          <article class="loop-step loop-step--three"><span>03</span><div><h3>Act</h3><p>Move physically or interact with the overhead map.</p></div></article>
-          <article class="loop-step loop-step--four"><span>04</span><div><h3>Verify</h3><p>Observe the changed world and update the plan.</p></div></article>
-          <svg class="loop-lines" viewBox="0 0 760 560" aria-hidden="true"><path d="M380 102C555 102 652 205 652 280S555 458 380 458 108 355 108 280 205 102 380 102Z"/><path d="m635 229 22 49-49-8"/><path d="m127 330-22-49 49 8"/></svg>
-        </div>
-      </div>
-
-      <div class="shell diagnostics reveal">
-        <div class="diagnostics-title"><span>Beyond binary success</span><p>The benchmark records how an episode unfolds, not only where it ends.</p></div>
-        <div class="diagnostic-list">
-          <span>Normalized progress</span><span>Path efficiency</span><span>Map-use behaviour</span><span>Constraint compliance</span><span>Partial completion</span><span>Safety events</span><span>Run reliability</span>
-        </div>
+          <figcaption>
+            <span class="selected-index">Figure 2</span>
+            <div><strong data-selected-title>Day</strong><p data-selected-caption>The same Hong Kong viewpoint under clear daytime illumination.</p></div>
+          </figcaption>
+        </figure>
       </div>
     </section>
 
-    <section class="section section--publication" id="publication" aria-labelledby="publication-title">
-      <div class="publication-glow" aria-hidden="true"></div>
+    <section class="section benchmark" id="urbanbench" aria-labelledby="benchmark-title">
+      <div class="shell section-heading">
+        <p class="section-number">03</p>
+        <div>
+          <p class="section-kicker">UrbanBench</p>
+          <h2 id="benchmark-title">From seeing a street to adapting within a city.</h2>
+          <p>UrbanBench follows a five-level progression from local understanding to explicit navigation, implicit goal inference, multi-task planning, and interaction with environmental change.</p>
+        </div>
+      </div>
+
+      <figure class="shell paper-figure benchmark-figure">
+        <img src="assets/figure-3.jpg" alt="Five-level UrbanBench task hierarchy shown as a staircase from local environment understanding to dynamic environment interaction" width="1945" height="839">
+        <figcaption><strong>Figure 3.</strong> The five-level task hierarchy in UrbanBench. Thirteen manually verified task types isolate progressively harder forms of urban agency.</figcaption>
+      </figure>
+
+      <div class="shell benchmark-summary">
+        <div><span>Levels</span><strong>5</strong></div>
+        <div><span>Task types</span><strong>13</strong></div>
+        <div><span>Interaction horizon</span><strong>100 steps</strong></div>
+        <p>The benchmark exposes only task instructions, first-person observations, physical controls, and map interaction. It does not provide hidden coordinates, remaining distance, or privileged simulator state.</p>
+      </div>
+    </section>
+
+    <section class="section publication" id="publication" aria-labelledby="publication-title">
       <div class="shell publication-grid">
-        <div class="publication-heading reveal">
-          <p class="section-index">04 · Technical report</p>
-          <h2 id="publication-title"><span class="wordmark wordmark--inline" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span><br><em>Evaluating MLLM Agents through Real-Scale Urban Exploration</em></h2>
+        <div>
+          <p class="section-kicker">Technical report · 2026</p>
+          <h2 id="publication-title"><span class="wordmark wordmark--publication" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span></h2>
+          <p class="publication-title">Evaluating MLLM Agents through Real-Scale Urban Exploration</p>
         </div>
 
-        <div class="publication-details reveal" data-delay="100">
-          <p class="authors">Tianjie Ju<sup>1,2,3</sup>, Yueqing Sun<sup>3</sup>, Zheng Wu<sup>2</sup>, Yuhan Cui<sup>4</sup>, Bobo Li<sup>1</sup>, Pengzhou Cheng<sup>2</sup>, Haodong Zhao<sup>2</sup>, Xinbei Ma<sup>2</sup>, Qi Gu<sup>3</sup>, Hao Fei<sup>5</sup>, Zhuosheng Zhang<sup>2</sup></p>
+        <div class="publication-details">
+          <p class="authors authors--publication">Tianjie Ju<sup>1,2,3</sup>, Yueqing Sun<sup>3</sup>, Zheng Wu<sup>2</sup>, Yuhan Cui<sup>4</sup>, Bobo Li<sup>1</sup>, Pengzhou Cheng<sup>2</sup>, Haodong Zhao<sup>2</sup>, Xinbei Ma<sup>2</sup>, Qi Gu<sup>3</sup>, Hao Fei<sup>5</sup>, Zhuosheng Zhang<sup>2</sup></p>
           <ol class="affiliation-list">
             <li><sup>1</sup> National University of Singapore</li>
             <li><sup>2</sup> Shanghai Jiao Tong University</li>
@@ -297,10 +176,8 @@
           </ol>
 
           <div class="publication-actions">
-            <span class="coming-soon"><i></i> arXiv link coming soon</span>
-            <button class="copy-button" type="button" data-copy-bib>
-              <span>Copy BibTeX</span><span aria-hidden="true">⧉</span>
-            </button>
+            <span>arXiv link coming soon</span>
+            <button class="copy-button" type="button" data-copy-bib>Copy BibTeX</button>
           </div>
 
           <pre class="bibtex" data-bibtex tabindex="0"><code>@article{ju2026urbanarena,
@@ -319,13 +196,13 @@
   </main>
 
   <footer class="site-footer">
-    <div class="shell footer-grid">
+    <div class="shell footer-inner">
       <div class="footer-brand">
-        <img src="assets/urbanarena-mark.svg" alt="" width="46" height="46">
-        <div><span class="wordmark wordmark--footer" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span><p>A real city. A grounded test.</p></div>
+        <img src="assets/urbanarena-icon.png" alt="" width="28" height="35">
+        <span class="wordmark wordmark--footer" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span>
       </div>
-      <div class="footer-links"><a href="#overview">Overview</a><a href="#benchmark">UrbanBench</a><a href="#publication">Publication</a><a href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">GitHub</a></div>
-      <div class="footer-meta"><span>Technical report · 2026</span><span>urbanarena.github.io</span></div>
+      <p>Real-scale urban exploration for multimodal agents.</p>
+      <div class="footer-links"><a href="#urbanarena">Overview</a><a href="#simulation">Simulation</a><a href="#urbanbench">UrbanBench</a><a href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">GitHub</a></div>
     </div>
   </footer>
 

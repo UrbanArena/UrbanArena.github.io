@@ -2,19 +2,16 @@
   const header = document.querySelector('[data-header]');
   const navToggle = document.querySelector('.nav-toggle');
   const nav = document.querySelector('#site-nav');
-  const stage = document.querySelector('[data-scene]');
-  const clock = document.querySelector('[data-clock]');
-  const weather = document.querySelector('[data-weather]');
   const toast = document.querySelector('[data-toast]');
 
-  const updateHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 18);
+  const updateHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
   updateHeader();
   window.addEventListener('scroll', updateHeader, { passive: true });
 
   navToggle?.addEventListener('click', () => {
-    const open = navToggle.getAttribute('aria-expanded') === 'true';
-    navToggle.setAttribute('aria-expanded', String(!open));
-    nav?.classList.toggle('is-open', !open);
+    const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+    navToggle.setAttribute('aria-expanded', String(!isOpen));
+    nav?.classList.toggle('is-open', !isOpen);
   });
 
   nav?.querySelectorAll('a').forEach((link) => {
@@ -24,59 +21,55 @@
     });
   });
 
-  const scenes = {
-    day: { clock: '12:15', weather: 'Clear day' },
-    dusk: { clock: '18:40', weather: 'Dusk' },
-    rain: { clock: '15:20', weather: 'Rain' },
-    night: { clock: '22:10', weather: 'Night' },
-  };
+  const figureButtons = [...document.querySelectorAll('[data-figure-src]')];
+  const selectedImage = document.querySelector('[data-selected-image]');
+  const selectedTitle = document.querySelector('[data-selected-title]');
+  const selectedCaption = document.querySelector('[data-selected-caption]');
 
-  document.querySelectorAll('[data-set-scene]').forEach((button) => {
+  figureButtons.forEach((button) => {
+    const preload = new Image();
+    preload.src = button.dataset.figureSrc;
+
     button.addEventListener('click', () => {
-      const scene = button.dataset.setScene;
-      if (!stage || !scenes[scene]) return;
-      stage.dataset.scene = scene;
-      document.querySelectorAll('[data-set-scene]').forEach((item) => item.classList.toggle('is-active', item === button));
-      if (clock) clock.textContent = scenes[scene].clock;
-      if (weather) weather.textContent = scenes[scene].weather;
+      if (!selectedImage) return;
+
+      figureButtons.forEach((item) => {
+        const active = item === button;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+
+      selectedImage.classList.add('is-changing');
+      const applySelection = () => {
+        selectedImage.src = button.dataset.figureSrc;
+        selectedImage.alt = `Figure 2 panel: ${button.dataset.figureTitle}`;
+        if (selectedTitle) selectedTitle.textContent = button.dataset.figureTitle;
+        if (selectedCaption) selectedCaption.textContent = button.dataset.figureCaption;
+        requestAnimationFrame(() => selectedImage.classList.remove('is-changing'));
+      };
+
+      window.setTimeout(applySelection, 90);
     });
   });
-
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const revealItems = document.querySelectorAll('.reveal');
-  revealItems.forEach((item) => item.style.setProperty('--delay', `${item.dataset.delay || 0}ms`));
-  if (reducedMotion || !('IntersectionObserver' in window)) {
-    revealItems.forEach((item) => item.classList.add('is-visible'));
-  } else {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px' });
-    revealItems.forEach((item) => observer.observe(item));
-  }
 
   const copyButton = document.querySelector('[data-copy-bib]');
   const bibtex = document.querySelector('[data-bibtex]');
   let toastTimer;
+
   const showCopiedState = () => {
-    const label = copyButton?.querySelector('span');
-    if (label) label.textContent = 'Copied';
+    if (copyButton) copyButton.textContent = 'Copied';
     toast?.classList.add('is-visible');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => {
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => {
       toast?.classList.remove('is-visible');
-      if (label) label.textContent = 'Copy BibTeX';
-    }, 1800);
+      if (copyButton) copyButton.textContent = 'Copy BibTeX';
+    }, 1700);
   };
 
   copyButton?.addEventListener('click', async () => {
     const value = bibtex?.textContent?.trim();
     if (!value) return;
-    showCopiedState();
+
     try {
       await navigator.clipboard.writeText(value);
     } catch {
@@ -89,5 +82,7 @@
       document.execCommand('copy');
       field.remove();
     }
+
+    showCopiedState();
   });
 })();
