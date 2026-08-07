@@ -2,7 +2,6 @@
   const header = document.querySelector('[data-header]');
   const navToggle = document.querySelector('.nav-toggle');
   const nav = document.querySelector('#site-nav');
-  const toast = document.querySelector('[data-toast]');
 
   const updateHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
   updateHeader();
@@ -52,37 +51,4 @@
     });
   });
 
-  const copyButton = document.querySelector('[data-copy-bib]');
-  const bibtex = document.querySelector('[data-bibtex]');
-  let toastTimer;
-
-  const showCopiedState = () => {
-    if (copyButton) copyButton.textContent = 'Copied';
-    toast?.classList.add('is-visible');
-    window.clearTimeout(toastTimer);
-    toastTimer = window.setTimeout(() => {
-      toast?.classList.remove('is-visible');
-      if (copyButton) copyButton.textContent = 'Copy BibTeX';
-    }, 1700);
-  };
-
-  copyButton?.addEventListener('click', async () => {
-    const value = bibtex?.textContent?.trim();
-    if (!value) return;
-
-    try {
-      await navigator.clipboard.writeText(value);
-    } catch {
-      const field = document.createElement('textarea');
-      field.value = value;
-      field.setAttribute('readonly', '');
-      field.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
-      document.body.appendChild(field);
-      field.select();
-      document.execCommand('copy');
-      field.remove();
-    }
-
-    showCopiedState();
-  });
 })();
