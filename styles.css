@@ -143,6 +143,20 @@ button { color: inherit; }
   line-height: 1.75;
 }
 .authors sup, .affiliation-list sup { color: #3e6f9a; font-family: var(--sans); font-size: .62em; font-weight: 700; }
+.app-link-row {
+  margin: 22px 0 0 77px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  color: #3f464d;
+  font-size: .76rem;
+}
+.platform-icons { display: inline-flex; align-items: center; gap: 6px; margin-right: 3px; }
+.platform-icons img { width: 28px; height: 28px; padding: 5px; border: 1px solid var(--line); background: #fff; object-fit: contain; }
+.app-link-label { font-weight: 700; letter-spacing: .015em; }
+.app-link-row a { color: #365f82; overflow-wrap: anywhere; text-decoration-color: #9db2c3; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.app-link-row a:hover, .app-link-row a:focus-visible { color: var(--ink); text-decoration-color: var(--ink); }
 .project-links { display: flex; gap: 10px; margin: 28px 0 0 77px; }
 .link-button {
   display: inline-flex;
@@ -334,7 +348,7 @@ button { color: inherit; }
   .title-icon { width: 39px; height: auto; margin-top: 3px; }
   .wordmark--hero, .title-colon { font-size: clamp(2.6rem, 12vw, 4rem); }
   .paper-title { display: block; margin-top: 5px; font-size: clamp(1.75rem, 8.5vw, 2.7rem); }
-  .abstract-lede, .authors, .project-links { margin-left: 49px; }
+  .abstract-lede, .authors, .app-link-row, .project-links { margin-left: 49px; }
   .institution-logos { grid-template-columns: repeat(6, minmax(112px, 1fr)); padding: 22px 0; overflow-x: auto; scrollbar-width: thin; }
   .institution { min-height: 54px; padding: 0 12px; }
   .paper-figure { margin-top: 44px; }
@@ -356,7 +370,8 @@ button { color: inherit; }
 
 @media (max-width: 480px) {
   .title-row { align-items: flex-start; }
-  .abstract-lede, .authors, .project-links { margin-left: 0; }
+  .abstract-lede, .authors, .app-link-row, .project-links { margin-left: 0; }
+  .app-link-row { align-items: flex-start; }
   .project-links { display: grid; grid-template-columns: 1fr; }
   .link-button { justify-content: space-between; }
   .institution-logos { margin-top: 36px; }
