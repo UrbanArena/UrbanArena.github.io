@@ -12,8 +12,8 @@
   <meta property="og:image" content="https://urbanarena.github.io/assets/figure-1-overview.jpg">
   <title>UrbanArena — Real-Scale Urban Exploration for MLLM Agents</title>
   <link rel="icon" href="assets/urbanarena-favicon.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=20260813a">
-  <script src="script.js?v=20260813a" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20260813b">
+  <script src="script.js?v=20260813b" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -55,73 +55,9 @@
 
         <p class="abstract-lede">A real-scale urban sandbox that turns territory-wide 3D geospatial data of Hong Kong into a continuously rendered and physically grounded environment for multimodal agents.</p>
 
-        <section class="demo-reel" id="demos" aria-labelledby="demos-title">
-          <div class="demo-reel-heading">
-            <p>UrbanArena in action</p>
-            <h2 id="demos-title">Explore, navigate, and interact at city scale.</h2>
-          </div>
-
-          <div class="demo-grid">
-            <figure class="demo-card">
-              <video autoplay muted loop playsinline preload="metadata" aria-label="An MLLM agent interacting with UrbanArena">
-                <source src="assets/videos/agent-integration.mp4" type="video/mp4">
-              </video>
-              <figcaption>Agent Integration</figcaption>
-            </figure>
-            <figure class="demo-card">
-              <video autoplay muted loop playsinline preload="metadata" aria-label="Teleporting through Hong Kong with the global map">
-                <source src="assets/videos/map-teleportation.mp4" type="video/mp4">
-              </video>
-              <figcaption>Map Teleportation</figcaption>
-            </figure>
-            <figure class="demo-card">
-              <video autoplay muted loop playsinline preload="metadata" aria-label="Searching for a destination in the urban environment">
-                <source src="assets/videos/place-search.mp4" type="video/mp4">
-              </video>
-              <figcaption>Place Search</figcaption>
-            </figure>
-            <figure class="demo-card">
-              <video autoplay muted loop playsinline preload="metadata" aria-label="Navigating along the pedestrian network">
-                <source src="assets/videos/pedestrian-navigation.mp4" type="video/mp4">
-              </video>
-              <figcaption>Pedestrian Navigation</figcaption>
-            </figure>
-            <figure class="demo-card">
-              <video autoplay muted loop playsinline preload="metadata" aria-label="Traversing an outdoor staircase">
-                <source src="assets/videos/stair-traversal.mp4" type="video/mp4">
-              </video>
-              <figcaption>Stair Traversal</figcaption>
-            </figure>
-            <figure class="demo-card">
-              <video autoplay muted loop playsinline preload="metadata" aria-label="Exploring Hong Kong from street level">
-                <source src="assets/videos/street-exploration.mp4" type="video/mp4">
-              </video>
-              <figcaption>Street-Level Exploration</figcaption>
-            </figure>
-            <figure class="demo-card">
-              <video autoplay muted loop playsinline preload="metadata" aria-label="Adjusting the global map viewpoint">
-                <source src="assets/videos/map-view-control.mp4" type="video/mp4">
-              </video>
-              <figcaption>Map View Control</figcaption>
-            </figure>
-            <figure class="demo-card">
-              <video autoplay muted loop playsinline preload="metadata" aria-label="Changing weather conditions in the simulator">
-                <source src="assets/videos/weather-control.mp4" type="video/mp4">
-              </video>
-              <figcaption>Weather Control</figcaption>
-            </figure>
-            <figure class="demo-card">
-              <video autoplay muted loop playsinline preload="metadata" aria-label="Changing the time of day in the simulator">
-                <source src="assets/videos/time-of-day-control.mp4" type="video/mp4">
-              </video>
-              <figcaption>Time-of-Day Control</figcaption>
-            </figure>
-          </div>
-        </section>
-
         <div class="app-link-row" aria-label="UrbanArena application downloads">
-          <div class="platform-icons" aria-label="Available for iOS, Windows, and Linux">
-            <img src="assets/platform-apple.svg" alt="iOS" width="28" height="28">
+          <div class="platform-icons" aria-label="Available for macOS, Windows, and Linux">
+            <img src="assets/platform-apple.svg" alt="macOS" width="28" height="28">
             <img src="assets/platform-windows.svg" alt="Windows" width="28" height="28">
             <img src="assets/platform-linux.svg" alt="Linux" width="28" height="28">
           </div>
@@ -142,6 +78,71 @@
           <div class="institution"><img class="logo-shu" src="assets/shu.jpg" alt="Shanghai University"></div>
           <div class="institution"><img class="logo-oxford" src="assets/oxford.jpeg" alt="University of Oxford"></div>
         </div>
+
+        <section class="demo-reel" id="demos" aria-labelledby="demos-title">
+          <div class="demo-reel-heading">
+            <p>UrbanArena in action</p>
+            <h2 id="demos-title">Explore, navigate, and interact at city scale.</h2>
+          </div>
+
+          <div class="demo-grid">
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="none" aria-label="An MLLM agent interacting with UrbanArena">
+                <source data-src="assets/videos/agent-integration.mp4" type="video/mp4">
+              </video>
+              <figcaption>Agent Integration</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="none" aria-label="Teleporting through Hong Kong with the global map">
+                <source data-src="assets/videos/map-teleportation.mp4" type="video/mp4">
+              </video>
+              <figcaption>Map Teleportation</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="none" aria-label="Searching for a destination in the urban environment">
+                <source data-src="assets/videos/place-search.mp4" type="video/mp4">
+              </video>
+              <figcaption>Place Search</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="none" aria-label="Navigating along the pedestrian network">
+                <source data-src="assets/videos/pedestrian-navigation.mp4" type="video/mp4">
+              </video>
+              <figcaption>Pedestrian Navigation</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="none" aria-label="Traversing an outdoor staircase">
+                <source data-src="assets/videos/stair-traversal.mp4" type="video/mp4">
+              </video>
+              <figcaption>Stair Traversal</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="none" aria-label="Exploring Hong Kong from street level">
+                <source data-src="assets/videos/street-exploration.mp4" type="video/mp4">
+              </video>
+              <figcaption>Street-Level Exploration</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="none" aria-label="Adjusting the global map viewpoint">
+                <source data-src="assets/videos/map-view-control.mp4" type="video/mp4">
+              </video>
+              <figcaption>Map View Control</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="none" aria-label="Changing weather conditions in the simulator">
+                <source data-src="assets/videos/weather-control.mp4" type="video/mp4">
+              </video>
+              <figcaption>Weather Control</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="none" aria-label="Changing the time of day in the simulator">
+                <source data-src="assets/videos/time-of-day-control.mp4" type="video/mp4">
+              </video>
+              <figcaption>Time-of-Day Control</figcaption>
+            </figure>
+          </div>
+        </section>
+
       </div>
 
       <figure class="shell paper-figure hero-figure" id="urbanarena">

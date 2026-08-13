@@ -23,21 +23,38 @@
   const demoVideos = [...document.querySelectorAll('.demo-card video')];
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (reduceMotion) {
-    demoVideos.forEach((video) => video.pause());
-  } else if ('IntersectionObserver' in window) {
+  const loadVideo = (video) => {
+    if (video.dataset.loaded === 'true') return;
+    const source = video.querySelector('source[data-src]');
+    if (!source) return;
+    source.src = source.dataset.src;
+    video.dataset.loaded = 'true';
+    video.load();
+  };
+
+  if ('IntersectionObserver' in window) {
     const videoObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         const video = entry.target;
         if (entry.isIntersecting) {
-          video.play().catch(() => {});
+          loadVideo(video);
+          if (!reduceMotion) {
+            video.play().catch(() => {
+              video.addEventListener('canplay', () => video.play().catch(() => {}), { once: true });
+            });
+          }
         } else {
           video.pause();
         }
       });
-    }, { rootMargin: '120px 0px', threshold: 0.15 });
+    }, { rootMargin: '160px 0px', threshold: 0.1 });
 
     demoVideos.forEach((video) => videoObserver.observe(video));
+  } else {
+    demoVideos.forEach((video) => {
+      loadVideo(video);
+      if (!reduceMotion) video.play().catch(() => {});
+    });
   }
 
   const figureButtons = [...document.querySelectorAll('[data-figure-src]')];

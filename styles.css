@@ -135,7 +135,7 @@ button { color: inherit; }
   line-height: 1.58;
 }
 .demo-reel {
-  margin-top: 52px;
+  margin-top: 48px;
   padding-top: 24px;
   border-top: 1px solid var(--ink);
 }
@@ -228,7 +228,7 @@ button { color: inherit; }
 .link-button--disabled { cursor: default; user-select: none; }
 
 .institution-logos {
-  margin: 48px 0 0;
+  margin: 38px 0 0;
   padding: 26px 0;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
