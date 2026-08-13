@@ -12,8 +12,8 @@
   <meta property="og:image" content="https://urbanarena.github.io/assets/figure-1-overview.jpg">
   <title>UrbanArena — Real-Scale Urban Exploration for MLLM Agents</title>
   <link rel="icon" href="assets/urbanarena-favicon.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=20260807c">
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20260813a">
+  <script src="script.js?v=20260813a" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -30,6 +30,7 @@
       </button>
 
       <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+        <a href="#demos">Demos</a>
         <a href="#urbanarena">UrbanArena</a>
         <a href="#simulation">Simulation</a>
         <a href="#urbanbench">UrbanBench</a>
@@ -53,6 +54,70 @@
         </div>
 
         <p class="abstract-lede">A real-scale urban sandbox that turns territory-wide 3D geospatial data of Hong Kong into a continuously rendered and physically grounded environment for multimodal agents.</p>
+
+        <section class="demo-reel" id="demos" aria-labelledby="demos-title">
+          <div class="demo-reel-heading">
+            <p>UrbanArena in action</p>
+            <h2 id="demos-title">Explore, navigate, and interact at city scale.</h2>
+          </div>
+
+          <div class="demo-grid">
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="metadata" aria-label="An MLLM agent interacting with UrbanArena">
+                <source src="assets/videos/agent-integration.mp4" type="video/mp4">
+              </video>
+              <figcaption>Agent Integration</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="metadata" aria-label="Teleporting through Hong Kong with the global map">
+                <source src="assets/videos/map-teleportation.mp4" type="video/mp4">
+              </video>
+              <figcaption>Map Teleportation</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="metadata" aria-label="Searching for a destination in the urban environment">
+                <source src="assets/videos/place-search.mp4" type="video/mp4">
+              </video>
+              <figcaption>Place Search</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="metadata" aria-label="Navigating along the pedestrian network">
+                <source src="assets/videos/pedestrian-navigation.mp4" type="video/mp4">
+              </video>
+              <figcaption>Pedestrian Navigation</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="metadata" aria-label="Traversing an outdoor staircase">
+                <source src="assets/videos/stair-traversal.mp4" type="video/mp4">
+              </video>
+              <figcaption>Stair Traversal</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="metadata" aria-label="Exploring Hong Kong from street level">
+                <source src="assets/videos/street-exploration.mp4" type="video/mp4">
+              </video>
+              <figcaption>Street-Level Exploration</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="metadata" aria-label="Adjusting the global map viewpoint">
+                <source src="assets/videos/map-view-control.mp4" type="video/mp4">
+              </video>
+              <figcaption>Map View Control</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="metadata" aria-label="Changing weather conditions in the simulator">
+                <source src="assets/videos/weather-control.mp4" type="video/mp4">
+              </video>
+              <figcaption>Weather Control</figcaption>
+            </figure>
+            <figure class="demo-card">
+              <video autoplay muted loop playsinline preload="metadata" aria-label="Changing the time of day in the simulator">
+                <source src="assets/videos/time-of-day-control.mp4" type="video/mp4">
+              </video>
+              <figcaption>Time-of-Day Control</figcaption>
+            </figure>
+          </div>
+        </section>
 
         <div class="app-link-row" aria-label="UrbanArena application downloads">
           <div class="platform-icons" aria-label="Available for iOS, Windows, and Linux">
@@ -96,8 +161,8 @@
         <p class="section-number">02</p>
         <div>
           <p class="section-kicker">Dynamic simulation</p>
-          <h2 id="simulation-title">One city, nine conditions.</h2>
-          <p>Figure 2 separates the dynamic simulation into nine directly comparable views. Select a condition to inspect the original panel from the paper.</p>
+          <h2 id="simulation-title">Diverse urban environments.</h2>
+          <p>Figure 2 groups the dynamic simulation by time of day, weather, and pedestrian activity. Select a condition to inspect the original panel from the paper.</p>
         </div>
       </div>
 
@@ -201,7 +266,7 @@
         <span class="wordmark wordmark--footer" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span>
       </div>
       <p>Real-scale urban exploration for multimodal agents.</p>
-      <div class="footer-links"><a href="#urbanarena">Overview</a><a href="#simulation">Simulation</a><a href="#urbanbench">UrbanBench</a><a href="#coverage">Coverage</a><a href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">GitHub</a></div>
+      <div class="footer-links"><a href="#demos">Demos</a><a href="#urbanarena">Overview</a><a href="#simulation">Simulation</a><a href="#urbanbench">UrbanBench</a><a href="#coverage">Coverage</a><a href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">GitHub</a></div>
     </div>
   </footer>
 

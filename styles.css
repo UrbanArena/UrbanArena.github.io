@@ -134,6 +134,57 @@ button { color: inherit; }
   font-size: clamp(1.05rem, 1.7vw, 1.28rem);
   line-height: 1.58;
 }
+.demo-reel {
+  margin-top: 52px;
+  padding-top: 24px;
+  border-top: 1px solid var(--ink);
+}
+.demo-reel-heading {
+  margin-bottom: 22px;
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 20px;
+  align-items: baseline;
+}
+.demo-reel-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.demo-reel-heading h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(1.45rem, 2.5vw, 2.25rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -.025em;
+}
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px 16px;
+}
+.demo-card {
+  min-width: 0;
+  margin: 0;
+}
+.demo-card video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid #c7c9cc;
+  background: #111;
+}
+.demo-card figcaption {
+  margin-top: 7px;
+  color: #3f464d;
+  font-family: var(--serif);
+  font-size: .78rem;
+  line-height: 1.35;
+}
 .authors {
   max-width: 1050px;
   margin: 24px 0 0 77px;
@@ -349,6 +400,12 @@ button { color: inherit; }
   .wordmark--hero, .title-colon { font-size: clamp(2.6rem, 12vw, 4rem); }
   .paper-title { display: block; margin-top: 5px; font-size: clamp(1.75rem, 8.5vw, 2.7rem); }
   .abstract-lede, .authors, .app-link-row, .project-links { margin-left: 49px; }
+  .demo-reel { margin-top: 42px; }
+  .demo-reel-heading { grid-template-columns: 1fr; gap: 5px; }
+  .demo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 12px;
+  }
   .institution-logos { grid-template-columns: repeat(6, minmax(112px, 1fr)); padding: 22px 0; overflow-x: auto; scrollbar-width: thin; }
   .institution { min-height: 54px; padding: 0 12px; }
   .paper-figure { margin-top: 44px; }
@@ -371,6 +428,20 @@ button { color: inherit; }
 @media (max-width: 480px) {
   .title-row { align-items: flex-start; }
   .abstract-lede, .authors, .app-link-row, .project-links { margin-left: 0; }
+  .demo-grid {
+    width: calc(100vw - 16px);
+    margin-left: -16px;
+    padding: 0 16px 10px;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+  .demo-card {
+    flex: 0 0 min(82vw, 340px);
+    scroll-snap-align: start;
+  }
   .app-link-row { align-items: flex-start; }
   .project-links { display: grid; grid-template-columns: 1fr; }
   .link-button { justify-content: space-between; }
