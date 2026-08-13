@@ -22,4 +22,13 @@ Search `index.html` for `coming soon` and replace the paper button and arXiv sta
 
 ## Deployment
 
-This repository is designed for the special GitHub Pages account repository `UrbanArena/UrbanArena.github.io`. The site has no build step. Push the root files to the default branch and enable Pages from that branch.
+This repository is designed for the special GitHub Pages account repository
+`UrbanArena/UrbanArena.github.io`. GitHub Actions publishes the paper website
+and reconstructs the Unity WebAssembly game at `/play/` from its Git-friendly
+data parts. Configure **Settings → Pages → Source** as **GitHub Actions**, then
+push the default `main` branch.
+
+The browser game is compiled from the Unity project, not reimplemented in
+JavaScript. Its service worker supplies the cross-origin isolation required by
+the multithreaded PhysX Player on GitHub Pages. The first visit may reload once
+while that worker is installed.

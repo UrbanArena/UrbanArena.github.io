@@ -96,6 +96,7 @@ button { color: inherit; }
   transition: transform .16s ease;
 }
 .site-nav a:hover::after, .site-nav a:focus-visible::after { transform: scaleX(1); }
+.site-nav .nav-play { color: #2f6d69; }
 .nav-toggle { display: none; width: 38px; height: 38px; padding: 9px; border: 0; background: none; cursor: pointer; }
 .nav-toggle > span:not(.sr-only) { display: block; height: 1px; margin: 5px 0; background: var(--ink); transition: transform .15s ease, opacity .15s ease; }
 
@@ -225,6 +226,9 @@ button { color: inherit; }
 .link-button span { color: var(--muted); font-size: .62rem; font-weight: 500; }
 .link-button--dark { color: #fff; background: var(--ink); border-color: var(--ink); }
 .link-button--dark span { color: #c9cdd0; }
+.link-button--play { color: #fff; background: #2a9d8f; border-color: #2a9d8f; }
+.link-button--play span { color: rgba(255, 255, 255, .82); }
+.link-button--play:hover, .link-button--play:focus-visible { background: #237f75; border-color: #237f75; }
 .link-button--disabled { cursor: default; user-select: none; }
 
 .institution-logos {

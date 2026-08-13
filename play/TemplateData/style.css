@@ -1,0 +1,21 @@
+:root { color-scheme: dark; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+* { box-sizing: border-box; }
+html, body, #unity-container { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+body { background: radial-gradient(circle at 50% 28%, #19354b 0, #0b1723 54%, #07101a 100%); }
+#unity-container { position: fixed; inset: 0; }
+#unity-canvas { display: block; width: 100%; height: 100%; background: #0b1723; outline: 0; }
+#loading { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; padding: 32px; background: rgba(7, 16, 26, .93); text-align: center; }
+#loading[hidden] { display: none; }
+#loading img { border-radius: 24px; box-shadow: 0 20px 70px rgba(0, 0, 0, .3); }
+h1 { margin: 20px 0 8px; color: #e9f0f5; font-size: clamp(32px, 5vw, 52px); letter-spacing: -.05em; }
+.urban { background: linear-gradient(90deg, #4c78a8, #2a9d8f, #8b6fb1, #d99a35, #c45d68); -webkit-background-clip: text; background-clip: text; color: transparent; }
+p { margin: 0 0 18px; color: #c7d6e2; }
+.track { width: min(420px, 72vw); height: 6px; overflow: hidden; border-radius: 99px; background: rgba(255, 255, 255, .14); }
+#progress { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #4c78a8, #2a9d8f); transition: width .15s ease; }
+small { max-width: 440px; margin-top: 16px; color: #8196a8; line-height: 1.5; }
+#warning { position: absolute; z-index: 4; top: 18px; left: 50%; width: min(720px, calc(100% - 36px)); transform: translateX(-50%); }
+#warning div { margin-bottom: 8px; padding: 12px 16px; border: 1px solid rgba(255,255,255,.15); border-radius: 10px; background: rgba(20, 36, 49, .95); color: #eef5f8; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+#warning .error { border-color: rgba(196, 93, 104, .7); }
+#fullscreen { position: absolute; z-index: 3; right: 18px; bottom: 18px; width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.22); border-radius: 12px; background: rgba(10, 24, 36, .72); color: white; font-size: 24px; cursor: pointer; backdrop-filter: blur(12px); }
+#fullscreen[hidden] { display: none; }
+@media (max-width: 720px) { #fullscreen { display: none; } }

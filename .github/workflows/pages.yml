@@ -1,0 +1,47 @@
+name: Deploy UrbanArena website
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out website
+        uses: actions/checkout@v4
+
+      - name: Reassemble Unity data archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat play/Build/Web.data.unityweb.part-* > play/Build/Web.data.unityweb
+          actual="$(shasum -a 256 play/Build/Web.data.unityweb | awk '{print $1}')"
+          expected="$(cut -d ' ' -f 1 play/Build/Web.data.unityweb.sha256)"
+          test "$actual" = "$expected"
+          rm play/Build/Web.data.unityweb.part-* play/Build/Web.data.unityweb.sha256
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload static website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

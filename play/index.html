@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="theme-color" content="#0b1723">
+    <title>UrbanArena</title>
+    <link rel="icon" href="TemplateData/icon.png">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <!-- GitHub Pages cannot emit COOP/COEP response headers. This vendored
+         service worker adds them locally so the multithreaded Player keeps
+         SharedArrayBuffer, PhysX, and the desktop-equivalent interaction. -->
+    <script src="coi-serviceworker.js"></script>
+  </head>
+  <body>
+    <main id="unity-container">
+      <canvas id="unity-canvas" width=960 height=600 tabindex="0" aria-label="UrbanArena Unity game"></canvas>
+      <section id="loading" aria-live="polite">
+        <img src="TemplateData/icon.png" alt="" width="112" height="112">
+        <h1><span class="urban">Urban</span>Arena</h1>
+        <p id="loading-status">Preparing Unity WebAssembly</p>
+        <div class="track"><div id="progress"></div></div>
+        <small>The first load includes the Unity engine and city sandbox.</small>
+      </section>
+      <div id="warning"></div>
+      <button id="fullscreen" type="button" aria-label="Enter fullscreen">⛶</button>
+    </main>
+    <script>
+      const canvas = document.querySelector("#unity-canvas");
+      const loading = document.querySelector("#loading");
+      const status = document.querySelector("#loading-status");
+      const progress = document.querySelector("#progress");
+      const warning = document.querySelector("#warning");
+      const fullscreen = document.querySelector("#fullscreen");
+
+      function showBanner(message, type) {
+        const item = document.createElement("div");
+        item.className = type || "info";
+        item.textContent = message;
+        warning.appendChild(item);
+        if (type !== "error") setTimeout(() => item.remove(), 6000);
+      }
+
+      if (!crossOriginIsolated) {
+        showBanner("Preparing the secure browser runtime. The page may reload once.", "info");
+      }
+
+      function startUnity() {
+        const buildUrl = "Build";
+        const config = {
+        arguments: [],
+        dataUrl: buildUrl + "/Web.data.unityweb",
+        frameworkUrl: buildUrl + "/Web.framework.js.unityweb",
+        workerUrl: buildUrl + "/Web.worker.js.unityweb",
+        codeUrl: buildUrl + "/Web.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "UrbanArena",
+        productName: "UrbanArena",
+        productVersion: "1.0",
+        autoSyncPersistentDataPath: true,
+        showBanner
+        };
+
+        const loader = document.createElement("script");
+        loader.src = buildUrl + "/Web.loader.js";
+        loader.onload = () => createUnityInstance(canvas, config, value => {
+          const percentage = Math.round(value * 100);
+          progress.style.width = percentage + "%";
+          status.textContent = percentage < 100 ? `Loading UrbanArena · ${percentage}%` : "Starting the sandbox";
+        }).then(instance => {
+          loading.hidden = true;
+          fullscreen.hidden = false;
+          fullscreen.onclick = () => instance.SetFullscreen(1);
+          canvas.focus();
+        }).catch(error => {
+          status.textContent = "UrbanArena could not start";
+          showBanner(String(error), "error");
+        });
+        loader.onerror = () => showBanner("The Unity loader could not be downloaded.", "error");
+        document.body.appendChild(loader);
+      }
+
+      if (crossOriginIsolated) {
+        startUnity();
+      } else {
+        status.textContent = "Preparing the secure browser runtime";
+        setTimeout(() => {
+          if (!crossOriginIsolated)
+            showBanner("This browser could not enable the multithreaded Unity runtime. Try a current desktop Chrome, Edge, Firefox, or Safari release.", "error");
+        }, 10000);
+      }
+    </script>
+  </body>
+</html>
