@@ -24,8 +24,8 @@ Search `index.html` for `coming soon` and replace the paper button and arXiv sta
 
 This repository is designed for the special GitHub Pages account repository
 `UrbanArena/UrbanArena.github.io`. GitHub Actions publishes the paper website
-and reconstructs the Unity WebAssembly game at `/play/` from its Git-friendly
-data parts. Configure **Settings → Pages → Source** as **GitHub Actions**, then
+and verifies the Unity WebAssembly game assets under `/play/`. Configure
+**Settings → Pages → Source** as **GitHub Actions**, then
 push the default `main` branch.
 
 The browser game is compiled from the Unity project, not reimplemented in

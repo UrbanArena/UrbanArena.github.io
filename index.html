@@ -12,8 +12,17 @@
   <meta property="og:image" content="https://urbanarena.github.io/assets/figure-1-overview.jpg">
   <title>UrbanArena — Real-Scale Urban Exploration for MLLM Agents</title>
   <link rel="icon" href="assets/urbanarena-favicon.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=20260813b">
-  <script src="script.js?v=20260813b" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20260814a">
+  <script>
+    window.coi = {
+      shouldRegister: () => sessionStorage.getItem('urbanarenaStartAfterReload') === '1',
+      coepCredentialless: () => true,
+      coepDegrade: () => true,
+      quiet: true
+    };
+  </script>
+  <script src="coi-serviceworker.js"></script>
+  <script src="script.js?v=20260814a" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -35,7 +44,7 @@
         <a href="#simulation">Simulation</a>
         <a href="#urbanbench">UrbanBench</a>
         <a href="#coverage">Coverage</a>
-        <a class="nav-play" href="play/">Play Online</a>
+        <a class="nav-play" href="#play-online">Play Online</a>
         <a href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">Code</a>
       </nav>
     </div>
@@ -67,7 +76,7 @@
         </div>
 
         <div class="project-links" aria-label="Project links">
-          <a class="link-button link-button--play" href="play/">Play Online <span>Unity Web</span></a>
+          <a class="link-button link-button--play" href="#play-online">Play Online <span>Unity Web</span></a>
           <span class="link-button link-button--dark link-button--disabled">Paper <span>coming soon</span></span>
           <a class="link-button" href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">Code <span>coming soon</span></a>
         </div>
@@ -80,6 +89,28 @@
           <div class="institution"><img class="logo-shu" src="assets/shu.jpg" alt="Shanghai University"></div>
           <div class="institution"><img class="logo-oxford" src="assets/oxford.jpeg" alt="University of Oxford"></div>
         </div>
+
+        <section class="play-online" id="play-online" aria-labelledby="play-online-title" data-play-online>
+          <div class="play-heading">
+            <div>
+              <p class="section-kicker">Interactive Unity sandbox</p>
+              <h2 id="play-online-title">Want to explore UrbanArena yourself?</h2>
+            </div>
+            <p>Click the scene to load the complete browser edition here—no download or separate page required.</p>
+          </div>
+
+          <div class="play-stage" data-play-stage>
+            <button class="play-poster" type="button" data-play-start aria-label="Start UrbanArena in this page">
+              <img src="assets/urbanarena-play-preview.jpg" alt="First-person view of Central, Hong Kong in UrbanArena" width="2400" height="1350">
+              <span class="play-poster-shade"></span>
+              <span class="play-icon" aria-hidden="true"><span></span></span>
+              <span class="play-cta">Start exploring</span>
+            </button>
+          </div>
+
+          <p class="play-note"><strong>First visit:</strong> the complete Unity scene is loaded on demand and may take 3–5 minutes on a busy or slower connection. It is cached locally for faster return visits.</p>
+          <noscript><p class="play-note">JavaScript is required to launch the interactive sandbox.</p></noscript>
+        </section>
 
         <section class="demo-reel" id="demos" aria-labelledby="demos-title">
           <div class="demo-reel-heading">

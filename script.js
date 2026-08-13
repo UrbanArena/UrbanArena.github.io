@@ -20,6 +20,45 @@
     });
   });
 
+  const playStage = document.querySelector('[data-play-stage]');
+  const playStart = document.querySelector('[data-play-start]');
+  let gameStarted = false;
+
+  const startEmbeddedGame = () => {
+    if (!playStage || gameStarted) return;
+    if (!crossOriginIsolated) {
+      sessionStorage.setItem('urbanarenaStartAfterReload', '1');
+      window.location.reload();
+      return;
+    }
+
+    gameStarted = true;
+    sessionStorage.removeItem('urbanarenaStartAfterReload');
+    playStage.classList.add('is-loading');
+    playStart?.setAttribute('aria-busy', 'true');
+
+    const frame = document.createElement('iframe');
+    frame.className = 'play-frame';
+    frame.title = 'UrbanArena interactive Unity sandbox';
+    frame.src = 'play/';
+    frame.allow = 'fullscreen; gamepad';
+    frame.setAttribute('allowfullscreen', '');
+    frame.addEventListener('load', () => {
+      playStage.classList.remove('is-loading');
+      playStage.classList.add('is-playing');
+    });
+
+    playStage.replaceChildren(frame);
+    frame.focus();
+  };
+
+  playStart?.addEventListener('click', startEmbeddedGame);
+
+  if (sessionStorage.getItem('urbanarenaStartAfterReload') === '1') {
+    document.querySelector('#play-online')?.scrollIntoView({ block: 'center' });
+    startEmbeddedGame();
+  }
+
   const demoVideos = [...document.querySelectorAll('.demo-card video')];
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

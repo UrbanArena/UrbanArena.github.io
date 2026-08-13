@@ -9,8 +9,8 @@ the desktop application. Unity's browser-side Brotli decompression fallback
 makes the compressed files compatible with static hosting. The vendored
 `coi-serviceworker.js` supplies cross-origin isolation on GitHub Pages.
 
-The large `Web.data.unityweb` archive is stored as Git-friendly parts. The
-Pages workflow reconstructs it and verifies its SHA-256 before publication.
+The optimized `Web.data.unityweb` archive is small enough for normal Git. The
+Pages workflow verifies its SHA-256 before publication.
 
 `coi-serviceworker.js` is version 0.1.7 by Guido Zuidhof and contributors and
 is redistributed under the MIT License. See the attribution header in that
