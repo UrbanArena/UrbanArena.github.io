@@ -12,7 +12,7 @@
   <meta property="og:image" content="https://urbanarena.github.io/assets/figure-1-overview.jpg">
   <title>UrbanArena — Real-Scale Urban Exploration for MLLM Agents</title>
   <link rel="icon" href="assets/urbanarena-favicon.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=20260814a">
+  <link rel="stylesheet" href="styles.css?v=20260814c">
   <script>
     window.coi = {
       shouldRegister: () => sessionStorage.getItem('urbanarenaStartAfterReload') === '1',
@@ -22,7 +22,7 @@
     };
   </script>
   <script src="coi-serviceworker.js"></script>
-  <script src="script.js?v=20260814a" defer></script>
+  <script src="script.js?v=20260814c" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -53,8 +53,6 @@
   <main id="main">
     <section class="hero" id="top" aria-labelledby="hero-title">
       <div class="shell hero-copy">
-        <p class="report-label">Technical Report <span>2026</span></p>
-
         <div class="title-row">
           <img class="title-icon" src="assets/urbanarena-icon.png" alt="UrbanArena title emblem" width="62" height="78">
           <h1 id="hero-title">
@@ -108,9 +106,52 @@
             </button>
           </div>
 
+          <div class="control-panel" data-control-panel>
+            <div class="control-panel-heading">
+              <p>Control mode</p>
+              <div class="control-mode-switch" role="group" aria-label="Choose who controls UrbanArena">
+                <button class="control-mode is-active" type="button" aria-pressed="true" data-control-mode="human">Human Control</button>
+                <button class="control-mode" type="button" aria-pressed="false" aria-controls="agent-config" data-control-mode="agent">AI Control</button>
+              </div>
+            </div>
+
+            <form class="agent-config" id="agent-config" data-agent-form hidden>
+              <div class="agent-fields">
+                <label>
+                  <span>URL</span>
+                  <input type="url" name="endpoint" inputmode="url" autocomplete="url" placeholder="https://api.openai.com/v1/chat/completions" required>
+                </label>
+                <label>
+                  <span>API Key</span>
+                  <input type="password" name="apiKey" autocomplete="off" spellcheck="false" placeholder="sk-…" aria-describedby="api-key-note" required>
+                  <small id="api-key-note">Not recorded or stored by UrbanArena.</small>
+                </label>
+                <label>
+                  <span>Model name</span>
+                  <input type="text" name="model" autocomplete="off" spellcheck="false" placeholder="gpt-4o-mini" required>
+                </label>
+              </div>
+              <div class="agent-confirmation">
+                <button type="submit">Confirm</button>
+                <p data-agent-status role="status" aria-live="polite">The API key is sent only to the API URL you provide.</p>
+              </div>
+            </form>
+          </div>
+
           <p class="play-note"><strong>First visit:</strong> during periods of high visitor traffic or on slower connections, loading the complete Unity scene may take 3–5 minutes. It is cached locally for faster return visits.</p>
+          <div class="control-guide" aria-label="Basic keyboard controls">
+            <div><span><kbd>WASD</kbd> Move</span><span><kbd>Shift</kbd> Sprint</span><span><kbd>Space</kbd> Jump</span></div>
+            <div><span><kbd>Tab</kbd> Map</span><span><kbd>C</kbd> Pedestrian network</span><span><kbd>N</kbd> Walking navigation</span></div>
+          </div>
           <noscript><p class="play-note">JavaScript is required to launch the interactive sandbox.</p></noscript>
         </section>
+
+        <dialog class="desktop-notice" data-desktop-notice aria-labelledby="desktop-notice-title">
+          <p class="section-kicker">Desktop required</p>
+          <h2 id="desktop-notice-title">Please continue on a computer.</h2>
+          <p>UrbanArena requires a desktop browser for keyboard, mouse, and Unity controls.</p>
+          <button type="button" data-desktop-notice-close>Close</button>
+        </dialog>
 
         <section class="demo-reel" id="demos" aria-labelledby="demos-title">
           <div class="demo-reel-heading">
@@ -178,7 +219,19 @@
 
       </div>
 
-      <figure class="shell paper-figure hero-figure" id="urbanarena">
+    </section>
+
+    <section class="section overview" id="urbanarena" aria-labelledby="urbanarena-title">
+      <div class="shell section-heading">
+        <p class="section-number">01</p>
+        <div>
+          <p class="section-kicker">UrbanArena overview</p>
+          <h2 id="urbanarena-title">Hong Kong at real scale.</h2>
+          <p>Figure 1 presents the territory-wide sandbox and its two complementary views: embodied exploration at street level and global interaction through the map.</p>
+        </div>
+      </div>
+
+      <figure class="shell paper-figure hero-figure">
         <img src="assets/figure-1-overview.jpg" alt="UrbanArena overview showing street-level scenes, free first-person navigation, global map exploration, and aerial views of Hong Kong" width="2225" height="1333">
         <figcaption><strong>Figure 1.</strong> Overview of UrbanArena, a real-scale urban sandbox that transforms territory-wide 3D geospatial data into a physically grounded digital replica of Hong Kong.</figcaption>
       </figure>

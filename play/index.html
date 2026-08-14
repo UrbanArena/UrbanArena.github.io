@@ -32,6 +32,52 @@
       const progress = document.querySelector("#progress");
       const warning = document.querySelector("#warning");
       const fullscreen = document.querySelector("#fullscreen");
+      let unityInstance = null;
+      let agentConfigured = false;
+      let agentRunning = false;
+
+      const clearAgent = () => {
+        if (agentRunning) unityInstance?.SendMessage("LLMAgent", "Toggle");
+        agentRunning = false;
+        navigator.serviceWorker?.controller?.postMessage({ type: "urbanarenaAgentClear" });
+        agentConfigured = false;
+      };
+
+      const notifyParent = (state, message) => {
+        window.parent.postMessage({ type: "urbanarena:agent-state", state, message }, window.location.origin);
+      };
+
+      window.addEventListener("message", event => {
+        if (event.origin !== window.location.origin || event.source !== window.parent) return;
+        if (event.data?.type === "urbanarena:agent-start") {
+          const { endpoint, apiKey, model } = event.data;
+          let parsed;
+          try { parsed = new URL(endpoint); } catch { return notifyParent("error", "The model endpoint URL is invalid."); }
+          if (!["http:", "https:"].includes(parsed.protocol) || !apiKey || !model) {
+            return notifyParent("error", "URL, API Key, and Model name are required.");
+          }
+          if (!navigator.serviceWorker?.controller) {
+            return notifyParent("error", "The secure browser runtime is not ready. Reload the page and try again.");
+          }
+          navigator.serviceWorker.controller.postMessage({
+            type: "urbanarenaAgentConfigure",
+            endpoint: parsed.href,
+            apiKey: String(apiKey),
+            model: String(model)
+          });
+          agentConfigured = true;
+          if (!unityInstance) return;
+          if (!agentRunning) unityInstance.SendMessage("LLMAgent", "Toggle");
+          agentRunning = true;
+          canvas.blur();
+          notifyParent("running");
+        }
+        if (event.data?.type === "urbanarena:agent-stop") {
+          clearAgent();
+          notifyParent("stopped");
+        }
+      });
+      window.addEventListener("pagehide", clearAgent);
 
       function showBanner(message, type) {
         const item = document.createElement("div");
@@ -68,10 +114,18 @@
           progress.style.width = percentage + "%";
           status.textContent = percentage < 100 ? `Loading UrbanArena · ${percentage}%` : "Starting the sandbox";
         }).then(instance => {
+          unityInstance = instance;
           loading.hidden = true;
           fullscreen.hidden = false;
           fullscreen.onclick = () => instance.SetFullscreen(1);
           canvas.focus();
+          window.parent.postMessage({ type: "urbanarena:unity-ready" }, window.location.origin);
+          if (agentConfigured && !agentRunning) {
+            instance.SendMessage("LLMAgent", "Toggle");
+            agentRunning = true;
+            canvas.blur();
+            notifyParent("running");
+          }
         }).catch(error => {
           status.textContent = "UrbanArena could not start";
           showBanner(String(error), "error");

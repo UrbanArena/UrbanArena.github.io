@@ -22,7 +22,58 @@
 
   const playStage = document.querySelector('[data-play-stage]');
   const playStart = document.querySelector('[data-play-start]');
+  const controlModes = [...document.querySelectorAll('[data-control-mode]')];
+  const agentForm = document.querySelector('[data-agent-form]');
+  const agentStatus = document.querySelector('[data-agent-status]');
+  const desktopNotice = document.querySelector('[data-desktop-notice]');
+  const desktopNoticeClose = document.querySelector('[data-desktop-notice-close]');
   let gameStarted = false;
+  let gameFrame = null;
+  let unityReady = false;
+  let pendingAgentConfig = null;
+
+  const isMobileDevice = () => {
+    if (navigator.userAgentData?.mobile) return true;
+    if (/Android|iPhone|iPad|iPod|Mobile|IEMobile|Opera Mini/i.test(navigator.userAgent)) return true;
+    return navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+  };
+
+  const requestDesktop = () => {
+    if (!isMobileDevice()) return false;
+    if (desktopNotice?.showModal) desktopNotice.showModal();
+    else window.alert('UrbanArena requires a desktop computer. Please open this page on a desktop browser to play.');
+    return true;
+  };
+
+  const setAgentStatus = (message) => {
+    if (agentStatus) agentStatus.textContent = message;
+  };
+
+  const sendAgentMessage = (type, config) => {
+    if (!gameFrame?.contentWindow || !unityReady) return false;
+    gameFrame.contentWindow.postMessage({ type, ...(config || {}) }, window.location.origin);
+    return true;
+  };
+
+  const selectControlMode = (mode) => {
+    const useAgent = mode === 'agent';
+    controlModes.forEach((button) => {
+      const active = button.dataset.controlMode === mode;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    if (agentForm) agentForm.hidden = !useAgent;
+
+    if (!useAgent) {
+      if (gameFrame?.contentWindow) {
+        gameFrame.contentWindow.postMessage({ type: 'urbanarena:agent-stop' }, window.location.origin);
+      }
+      pendingAgentConfig = null;
+      playStage?.classList.remove('is-agent-controlled');
+      agentForm?.reset();
+      setAgentStatus('The API key is sent only to the API URL you provide.');
+    }
+  };
 
   const startEmbeddedGame = () => {
     if (!playStage || gameStarted) return;
@@ -37,23 +88,100 @@
     playStage.classList.add('is-loading');
     playStart?.setAttribute('aria-busy', 'true');
 
-    const frame = document.createElement('iframe');
-    frame.className = 'play-frame';
-    frame.title = 'UrbanArena interactive Unity sandbox';
-    frame.src = 'play/';
-    frame.allow = 'fullscreen; gamepad';
-    frame.setAttribute('allowfullscreen', '');
-    frame.addEventListener('load', () => {
+    gameFrame = document.createElement('iframe');
+    gameFrame.className = 'play-frame';
+    gameFrame.title = 'UrbanArena interactive Unity sandbox';
+    gameFrame.src = 'play/';
+    gameFrame.allow = 'fullscreen; gamepad';
+    gameFrame.setAttribute('allowfullscreen', '');
+    gameFrame.addEventListener('load', () => {
       playStage.classList.remove('is-loading');
       playStage.classList.add('is-playing');
     });
 
-    playStage.replaceChildren(frame);
-    frame.focus();
+    playStage.replaceChildren(gameFrame);
+    gameFrame.focus();
   };
 
-  playStart?.addEventListener('click', startEmbeddedGame);
+  playStart?.addEventListener('click', () => {
+    if (!requestDesktop()) startEmbeddedGame();
+  });
+  desktopNoticeClose?.addEventListener('click', () => desktopNotice?.close());
 
+  controlModes.forEach((button) => {
+    button.addEventListener('click', () => {
+      const mode = button.dataset.controlMode;
+      if (mode === 'agent' && requestDesktop()) return;
+      if (mode === 'agent' && !crossOriginIsolated) {
+        sessionStorage.setItem('urbanarenaControlAfterReload', 'agent');
+        startEmbeddedGame();
+        return;
+      }
+      selectControlMode(mode);
+      if (mode === 'agent') agentForm?.querySelector('input')?.focus();
+    });
+  });
+
+  agentForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!agentForm.reportValidity()) return;
+
+    const formData = new FormData(agentForm);
+    const endpoint = String(formData.get('endpoint') || '').trim();
+    const apiKey = String(formData.get('apiKey') || '');
+    const model = String(formData.get('model') || '').trim();
+    let endpointUrl;
+    try {
+      endpointUrl = new URL(endpoint);
+    } catch {
+      agentForm.elements.endpoint.setCustomValidity('Enter a complete API URL.');
+      agentForm.reportValidity();
+      return;
+    }
+    if (!['http:', 'https:'].includes(endpointUrl.protocol)) {
+      agentForm.elements.endpoint.setCustomValidity('Use an HTTP or HTTPS API URL.');
+      agentForm.reportValidity();
+      return;
+    }
+    agentForm.elements.endpoint.setCustomValidity('');
+
+    pendingAgentConfig = { endpoint: endpointUrl.href, apiKey, model };
+    setAgentStatus(gameStarted ? 'Waiting for UrbanArena to finish loading…' : 'Starting UrbanArena…');
+    startEmbeddedGame();
+    if (sendAgentMessage('urbanarena:agent-start', pendingAgentConfig)) {
+      pendingAgentConfig = null;
+      agentForm.elements.apiKey.value = '';
+      setAgentStatus('Agent is taking control and beginning its exploration.');
+    }
+  });
+
+  window.addEventListener('message', (event) => {
+    if (event.origin !== window.location.origin || event.source !== gameFrame?.contentWindow) return;
+    if (event.data?.type === 'urbanarena:unity-ready') {
+      unityReady = true;
+      if (pendingAgentConfig && sendAgentMessage('urbanarena:agent-start', pendingAgentConfig)) {
+        pendingAgentConfig = null;
+        if (agentForm) agentForm.elements.apiKey.value = '';
+        setAgentStatus('Agent is taking control and beginning its exploration.');
+      }
+      return;
+    }
+    if (event.data?.type === 'urbanarena:agent-state') {
+      if (event.data.state === 'running') {
+        playStage?.classList.add('is-agent-controlled');
+        setAgentStatus('Agent has control and is exploring UrbanArena.');
+      } else if (event.data.state === 'stopped') {
+        playStage?.classList.remove('is-agent-controlled');
+      } else if (event.data.state === 'error') {
+        setAgentStatus(event.data.message || 'The model endpoint could not be reached.');
+      }
+    }
+  });
+
+  if (sessionStorage.getItem('urbanarenaControlAfterReload') === 'agent') {
+    selectControlMode('agent');
+    if (crossOriginIsolated) sessionStorage.removeItem('urbanarenaControlAfterReload');
+  }
   if (sessionStorage.getItem('urbanarenaStartAfterReload') === '1') {
     document.querySelector('#play-online')?.scrollIntoView({ block: 'center' });
     startEmbeddedGame();
