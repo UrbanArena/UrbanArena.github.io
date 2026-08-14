@@ -335,6 +335,20 @@ button { color: inherit; }
 }
 .control-mode:hover, .control-mode:focus-visible { border-color: #697178; }
 .control-mode.is-active { border-color: var(--ink); background: var(--ink); color: #fff; }
+.control-exit {
+  display: block;
+  min-height: 34px;
+  margin: 10px 0 0 auto;
+  padding: 0 13px;
+  border: 1px solid #9b4f4f;
+  background: #fff;
+  color: #8b4141;
+  cursor: pointer;
+  font-size: .69rem;
+  font-weight: 700;
+}
+.control-exit[hidden] { display: none; }
+.control-exit:hover, .control-exit:focus-visible { border-color: #823737; background: #823737; color: #fff; }
 .agent-config { margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--line); }
 .agent-config[hidden] { display: none; }
 .agent-fields { display: grid; grid-template-columns: 1.25fr 1fr .8fr; gap: 12px; }
@@ -361,6 +375,7 @@ button { color: inherit; }
 .agent-fields textarea { min-height: 74px; line-height: 1.45; resize: vertical; }
 .agent-fields input:focus, .agent-fields textarea:focus { border-color: #63737d; outline: 1px solid #63737d; outline-offset: 0; }
 .agent-instruction-field { grid-column: 1 / -1; }
+.agent-instruction-field[hidden] { display: none; }
 .agent-task-tools { margin-top: 10px; display: flex; align-items: center; gap: 12px; }
 .agent-secondary-action, .agent-task-browser button {
   min-height: 34px;
@@ -408,8 +423,9 @@ button { color: inherit; }
 .agent-confirmation p { margin: 0; color: var(--muted); font-family: var(--serif); font-size: .72rem; line-height: 1.45; }
 .play-note { margin: 12px 0 0; color: #596168; font-family: var(--serif); font-size: .76rem; line-height: 1.5; }
 .play-note strong { color: var(--ink); }
+.play-note a { color: #287f76; text-underline-offset: 2px; }
 .control-guide { margin-top: 8px; color: #4c545b; font-size: .7rem; line-height: 1.65; }
-.control-guide > div { display: flex; flex-wrap: wrap; gap: 5px 22px; }
+.control-guide > div { display: flex; flex-wrap: nowrap; justify-content: space-between; gap: 5px 14px; }
 .control-guide span { white-space: nowrap; }
 .control-guide kbd {
   min-width: 24px;
@@ -617,6 +633,7 @@ button { color: inherit; }
   .play-icon { width: 62px; height: 62px; }
   .agent-fields { grid-template-columns: 1fr; }
   .agent-task-types { grid-template-columns: 1fr; }
+  .control-guide > div { flex-wrap: wrap; justify-content: flex-start; }
   .demo-reel-heading { grid-template-columns: 1fr; gap: 5px; }
   .demo-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

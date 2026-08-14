@@ -1,5 +1,4 @@
 (() => {
-  const DEFAULT_AGENT_INSTRUCTION = 'Explore UrbanArena freely. Observe the city, move through different areas, and use the map when useful.';
   const header = document.querySelector('[data-header]');
   const navToggle = document.querySelector('.nav-toggle');
   const nav = document.querySelector('#site-nav');
@@ -23,10 +22,12 @@
 
   const playStage = document.querySelector('[data-play-stage]');
   const playStart = document.querySelector('[data-play-start]');
+  const playExit = document.querySelector('[data-play-exit]');
   const controlModes = [...document.querySelectorAll('[data-control-mode]')];
   const agentForm = document.querySelector('[data-agent-form]');
   const agentStatus = document.querySelector('[data-agent-status]');
   const agentStop = document.querySelector('[data-agent-stop]');
+  const agentInstructionField = document.querySelector('[data-agent-instruction-field]');
   const taskLoad = document.querySelector('[data-task-load]');
   const taskClose = document.querySelector('[data-task-close]');
   const taskBrowser = document.querySelector('[data-task-browser]');
@@ -45,6 +46,7 @@
   let pendingTaskCatalog = false;
   let selectedTask = null;
   let agentActive = false;
+  let exitingGame = false;
 
   const capabilityNames = [
     'Local Environment Understanding',
@@ -83,8 +85,13 @@
     return true;
   };
 
+  const setBenchmarkMode = (active) => {
+    if (agentInstructionField) agentInstructionField.hidden = active;
+  };
+
   const clearTaskSelection = (notifyUnity = false) => {
     selectedTask = null;
+    setBenchmarkMode(false);
     if (taskSelection) taskSelection.textContent = 'No task selected · free exploration';
     if (taskPreview) taskPreview.hidden = true;
     taskGroups?.querySelectorAll('select').forEach((select) => { select.value = ''; });
@@ -140,6 +147,7 @@
             if (other !== select) other.value = '';
           });
           selectedTask = chosen;
+          setBenchmarkMode(true);
           if (taskSelection) taskSelection.textContent = `${chosen.display_id || chosen.entry_id} · ${chosen.type}`;
           if (taskPreview) taskPreview.hidden = false;
           if (taskPreviewTitle) taskPreviewTitle.textContent = `${chosen.display_id || chosen.entry_id} · ${chosen.type}`;
@@ -191,14 +199,16 @@
     }
 
     gameStarted = true;
+    exitingGame = false;
     sessionStorage.removeItem('urbanarenaStartAfterReload');
     playStage.classList.add('is-loading');
     playStart?.setAttribute('aria-busy', 'true');
+    if (playExit) playExit.hidden = false;
 
     gameFrame = document.createElement('iframe');
     gameFrame.className = 'play-frame';
     gameFrame.title = 'UrbanArena interactive Unity sandbox';
-    gameFrame.src = 'play/';
+    gameFrame.src = 'play/?v=20260814d';
     gameFrame.allow = 'fullscreen; gamepad';
     gameFrame.setAttribute('allowfullscreen', '');
     gameFrame.addEventListener('load', () => {
@@ -210,9 +220,42 @@
     gameFrame.focus();
   };
 
+  const exitEmbeddedGame = () => {
+    if (!gameStarted || exitingGame) return;
+    exitingGame = true;
+    const closingFrame = gameFrame;
+    closingFrame?.contentWindow?.postMessage({ type: 'urbanarena:agent-stop' }, window.location.origin);
+    pendingAgentConfig = null;
+    pendingTaskCatalog = false;
+    setAgentActive(false);
+    selectControlMode('human');
+    if (agentForm) agentForm.elements.apiKey.value = '';
+    if (taskBrowser) taskBrowser.hidden = true;
+    taskGroups?.replaceChildren();
+    taskLoad?.classList.remove('has-catalog');
+    if (taskLoad) {
+      taskLoad.textContent = 'Load Tasks';
+      taskLoad.setAttribute('aria-expanded', 'false');
+    }
+    if (playExit) playExit.hidden = true;
+
+    window.setTimeout(() => {
+      if (gameFrame !== closingFrame) return;
+      gameFrame = null;
+      unityReady = false;
+      gameStarted = false;
+      playStage?.classList.remove('is-loading', 'is-playing', 'is-agent-controlled');
+      playStart?.removeAttribute('aria-busy');
+      if (playStage && playStart) playStage.replaceChildren(playStart);
+      exitingGame = false;
+      playStart?.focus();
+    }, 120);
+  };
+
   playStart?.addEventListener('click', () => {
     if (!requestDesktop()) startEmbeddedGame();
   });
+  playExit?.addEventListener('click', exitEmbeddedGame);
   desktopNoticeClose?.addEventListener('click', () => desktopNotice?.close());
 
   taskLoad?.addEventListener('click', () => {
@@ -254,7 +297,7 @@
     const apiKey = String(formData.get('apiKey') || '');
     const model = String(formData.get('model') || '').trim();
     const instruction = String(formData.get('instruction') || '').trim();
-    const effectiveInstruction = selectedTask && instruction === DEFAULT_AGENT_INSTRUCTION ? '' : instruction;
+    const effectiveInstruction = selectedTask ? '' : instruction;
     let endpointUrl;
     try {
       endpointUrl = new URL(endpoint);
@@ -297,7 +340,7 @@
 
   let instructionTimer = 0;
   agentForm?.elements.instruction?.addEventListener('input', () => {
-    if (!agentActive) return;
+    if (!agentActive || selectedTask) return;
     window.clearTimeout(instructionTimer);
     instructionTimer = window.setTimeout(() => {
       sendAgentMessage('urbanarena:agent-instruction', {
@@ -309,6 +352,7 @@
 
   window.addEventListener('message', (event) => {
     if (event.origin !== window.location.origin || event.source !== gameFrame?.contentWindow) return;
+    if (exitingGame) return;
     if (event.data?.type === 'urbanarena:unity-ready') {
       unityReady = true;
       if (pendingTaskCatalog && sendAgentMessage('urbanarena:task-catalog-request')) {

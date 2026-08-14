@@ -131,12 +131,13 @@
 
       function startUnity() {
         const buildUrl = "Build";
+        const buildVersion = "?v=20260814d";
         const config = {
         arguments: [],
-        dataUrl: buildUrl + "/Web.data.unityweb",
-        frameworkUrl: buildUrl + "/Web.framework.js.unityweb",
-        workerUrl: buildUrl + "/Web.worker.js.unityweb",
-        codeUrl: buildUrl + "/Web.wasm.unityweb",
+        dataUrl: buildUrl + "/Web.data.unityweb" + buildVersion,
+        frameworkUrl: buildUrl + "/Web.framework.js.unityweb" + buildVersion,
+        workerUrl: buildUrl + "/Web.worker.js.unityweb" + buildVersion,
+        codeUrl: buildUrl + "/Web.wasm.unityweb" + buildVersion,
         streamingAssetsUrl: "StreamingAssets",
         companyName: "UrbanArena",
         productName: "UrbanArena",
@@ -146,7 +147,7 @@
         };
 
         const loader = document.createElement("script");
-        loader.src = buildUrl + "/Web.loader.js";
+        loader.src = buildUrl + "/Web.loader.js" + buildVersion;
         loader.onload = () => createUnityInstance(canvas, config, value => {
           const percentage = Math.round(value * 100);
           progress.style.width = percentage + "%";

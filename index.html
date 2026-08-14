@@ -12,7 +12,7 @@
   <meta property="og:image" content="https://urbanarena.github.io/assets/figure-1-overview.jpg">
   <title>UrbanArena — Real-Scale Urban Exploration for MLLM Agents</title>
   <link rel="icon" href="assets/urbanarena-favicon.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=20260814c">
+  <link rel="stylesheet" href="styles.css?v=20260814d">
   <script>
     window.coi = {
       shouldRegister: () => sessionStorage.getItem('urbanarenaStartAfterReload') === '1',
@@ -22,7 +22,7 @@
     };
   </script>
   <script src="coi-serviceworker.js"></script>
-  <script src="script.js?v=20260814c" defer></script>
+  <script src="script.js?v=20260814d" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -114,6 +114,7 @@
                 <button class="control-mode" type="button" aria-pressed="false" aria-controls="agent-config" data-control-mode="agent">AI Control</button>
               </div>
             </div>
+            <button class="control-exit" type="button" data-play-exit hidden>Exit Sandbox</button>
 
             <form class="agent-config" id="agent-config" data-agent-form hidden>
               <div class="agent-fields">
@@ -130,7 +131,7 @@
                   <span>Model name</span>
                   <input type="text" name="model" autocomplete="off" spellcheck="false" placeholder="gpt-4o-mini" required>
                 </label>
-                <label class="agent-instruction-field">
+                <label class="agent-instruction-field" data-agent-instruction-field>
                   <span>Instruction</span>
                   <textarea name="instruction" rows="3" spellcheck="true">Explore UrbanArena freely. Observe the city, move through different areas, and use the map when useful.</textarea>
                 </label>
@@ -164,11 +165,9 @@
             </form>
           </div>
 
-          <p class="play-note"><strong>First visit:</strong> during periods of high visitor traffic or on slower connections, loading the complete Unity scene may take 3–5 minutes. It is cached locally for faster return visits.</p>
+          <p class="play-note"><strong>First visit:</strong> during periods of high visitor traffic or on slower connections, loading the complete Unity scene may take 3–5 minutes. It is cached locally for faster return visits. For faster access, <a href="https://github.com/UrbanArena/UrbanArena">download the project from GitHub</a> and serve the tile datasets over a local network.</p>
           <div class="control-guide" aria-label="Basic keyboard controls">
-            <div><span><kbd>WASD</kbd> Move</span><span><kbd>Shift</kbd> Sprint</span><span><kbd>Space</kbd> Jump</span></div>
-            <div><span><kbd>Tab</kbd> Map</span><span><kbd>C</kbd> Pedestrian network</span><span><kbd>N</kbd> Walking navigation</span></div>
-            <div><span><kbd>F</kbd> Load tasks</span></div>
+            <div><span><kbd>WASD</kbd> Move</span><span><kbd>Shift</kbd> Sprint</span><span><kbd>Space</kbd> Jump</span><span><kbd>Tab</kbd> Map</span><span><kbd>C</kbd> Pedestrian network</span><span><kbd>N</kbd> Walking navigation</span><span><kbd>F</kbd> Load tasks</span></div>
           </div>
           <noscript><p class="play-note">JavaScript is required to launch the interactive sandbox.</p></noscript>
         </section>
