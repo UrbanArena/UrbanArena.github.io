@@ -1,4 +1,5 @@
 (() => {
+  const DEFAULT_AGENT_INSTRUCTION = 'Explore UrbanArena freely. Observe the city, move through different areas, and use the map when useful.';
   const header = document.querySelector('[data-header]');
   const navToggle = document.querySelector('.nav-toggle');
   const nav = document.querySelector('#site-nav');
@@ -25,12 +26,33 @@
   const controlModes = [...document.querySelectorAll('[data-control-mode]')];
   const agentForm = document.querySelector('[data-agent-form]');
   const agentStatus = document.querySelector('[data-agent-status]');
+  const agentStop = document.querySelector('[data-agent-stop]');
+  const taskLoad = document.querySelector('[data-task-load]');
+  const taskClose = document.querySelector('[data-task-close]');
+  const taskBrowser = document.querySelector('[data-task-browser]');
+  const taskGroups = document.querySelector('[data-task-groups]');
+  const taskSelection = document.querySelector('[data-task-selection]');
+  const taskPreview = document.querySelector('[data-task-preview]');
+  const taskPreviewTitle = document.querySelector('[data-task-preview-title]');
+  const taskPreviewPrompt = document.querySelector('[data-task-preview-prompt]');
+  const taskClear = document.querySelector('[data-task-clear]');
   const desktopNotice = document.querySelector('[data-desktop-notice]');
   const desktopNoticeClose = document.querySelector('[data-desktop-notice-close]');
   let gameStarted = false;
   let gameFrame = null;
   let unityReady = false;
   let pendingAgentConfig = null;
+  let pendingTaskCatalog = false;
+  let selectedTask = null;
+  let agentActive = false;
+
+  const capabilityNames = [
+    'Local Environment Understanding',
+    'Navigation under Explicit Instructions',
+    'Exploration under Implicit Instructions',
+    'Multi-Task Planning',
+    'Dynamic Environment Interaction'
+  ];
 
   const isMobileDevice = () => {
     if (navigator.userAgentData?.mobile) return true;
@@ -49,10 +71,94 @@
     if (agentStatus) agentStatus.textContent = message;
   };
 
+  const setAgentActive = (active) => {
+    agentActive = active;
+    if (agentStop) agentStop.disabled = !active;
+    playStage?.classList.toggle('is-agent-controlled', active);
+  };
+
   const sendAgentMessage = (type, config) => {
     if (!gameFrame?.contentWindow || !unityReady) return false;
     gameFrame.contentWindow.postMessage({ type, ...(config || {}) }, window.location.origin);
     return true;
+  };
+
+  const clearTaskSelection = (notifyUnity = false) => {
+    selectedTask = null;
+    if (taskSelection) taskSelection.textContent = 'No task selected · free exploration';
+    if (taskPreview) taskPreview.hidden = true;
+    taskGroups?.querySelectorAll('select').forEach((select) => { select.value = ''; });
+    if (notifyUnity) sendAgentMessage('urbanarena:task-clear');
+  };
+
+  const requestTaskCatalog = () => {
+    pendingTaskCatalog = true;
+    setAgentStatus('Loading the benchmark task library…');
+    startEmbeddedGame();
+    if (sendAgentMessage('urbanarena:task-catalog-request')) pendingTaskCatalog = false;
+  };
+
+  const renderTaskCatalog = (catalog) => {
+    if (!taskGroups || !catalog?.ok || !Array.isArray(catalog.tasks)) return;
+    taskGroups.replaceChildren();
+
+    for (let level = 1; level <= 5; level += 1) {
+      const tasks = catalog.tasks.filter((task) => task.level === level);
+      const levelDetails = document.createElement('details');
+      levelDetails.className = 'agent-task-level';
+      const levelSummary = document.createElement('summary');
+      levelSummary.textContent = `Level ${level} · ${capabilityNames[level - 1]} (${tasks.length})`;
+      levelDetails.appendChild(levelSummary);
+
+      const typeGrid = document.createElement('div');
+      typeGrid.className = 'agent-task-types';
+      const types = [...new Set(tasks.map((task) => task.type))];
+      types.forEach((type) => {
+        const typeTasks = tasks.filter((task) => task.type === type);
+        const label = document.createElement('label');
+        label.className = 'agent-task-type';
+        const name = document.createElement('span');
+        name.textContent = `${type} (${typeTasks.length})`;
+        const select = document.createElement('select');
+        select.setAttribute('aria-label', `Choose a ${type} task`);
+        const empty = document.createElement('option');
+        empty.value = '';
+        empty.textContent = 'Choose task…';
+        select.appendChild(empty);
+
+        typeTasks.forEach((task) => {
+          const option = document.createElement('option');
+          option.value = task.entry_id;
+          option.textContent = task.display_id || task.entry_id;
+          select.appendChild(option);
+        });
+
+        select.addEventListener('change', () => {
+          const chosen = typeTasks.find((task) => task.entry_id === select.value);
+          if (!chosen) return;
+          taskGroups.querySelectorAll('select').forEach((other) => {
+            if (other !== select) other.value = '';
+          });
+          selectedTask = chosen;
+          if (taskSelection) taskSelection.textContent = `${chosen.display_id || chosen.entry_id} · ${chosen.type}`;
+          if (taskPreview) taskPreview.hidden = false;
+          if (taskPreviewTitle) taskPreviewTitle.textContent = `${chosen.display_id || chosen.entry_id} · ${chosen.type}`;
+          if (taskPreviewPrompt) taskPreviewPrompt.textContent = 'Loading task instructions…';
+          sendAgentMessage('urbanarena:task-detail-request', { entryId: chosen.entry_id });
+          setAgentStatus('Task selected. Confirm to load it and start the agent.');
+        });
+
+        label.append(name, select);
+        typeGrid.appendChild(label);
+      });
+
+      levelDetails.appendChild(typeGrid);
+      taskGroups.appendChild(levelDetails);
+    }
+
+    taskLoad?.classList.add('has-catalog');
+    if (taskLoad) taskLoad.textContent = 'Tasks Loaded';
+    setAgentStatus('Choose a benchmark task, or continue with free exploration.');
   };
 
   const selectControlMode = (mode) => {
@@ -69,8 +175,9 @@
         gameFrame.contentWindow.postMessage({ type: 'urbanarena:agent-stop' }, window.location.origin);
       }
       pendingAgentConfig = null;
-      playStage?.classList.remove('is-agent-controlled');
+      setAgentActive(false);
       agentForm?.reset();
+      clearTaskSelection();
       setAgentStatus('The API key is sent only to the API URL you provide.');
     }
   };
@@ -108,6 +215,22 @@
   });
   desktopNoticeClose?.addEventListener('click', () => desktopNotice?.close());
 
+  taskLoad?.addEventListener('click', () => {
+    if (requestDesktop()) return;
+    const opening = taskBrowser?.hidden !== false;
+    if (taskBrowser) taskBrowser.hidden = !opening;
+    taskLoad.setAttribute('aria-expanded', String(opening));
+    if (opening && !taskLoad.classList.contains('has-catalog')) requestTaskCatalog();
+  });
+  taskClose?.addEventListener('click', () => {
+    if (taskBrowser) taskBrowser.hidden = true;
+    taskLoad?.setAttribute('aria-expanded', 'false');
+  });
+  taskClear?.addEventListener('click', () => {
+    clearTaskSelection(true);
+    setAgentStatus('Free exploration selected. Confirm to start the agent.');
+  });
+
   controlModes.forEach((button) => {
     button.addEventListener('click', () => {
       const mode = button.dataset.controlMode;
@@ -130,6 +253,8 @@
     const endpoint = String(formData.get('endpoint') || '').trim();
     const apiKey = String(formData.get('apiKey') || '');
     const model = String(formData.get('model') || '').trim();
+    const instruction = String(formData.get('instruction') || '').trim();
+    const effectiveInstruction = selectedTask && instruction === DEFAULT_AGENT_INSTRUCTION ? '' : instruction;
     let endpointUrl;
     try {
       endpointUrl = new URL(endpoint);
@@ -145,33 +270,80 @@
     }
     agentForm.elements.endpoint.setCustomValidity('');
 
-    pendingAgentConfig = { endpoint: endpointUrl.href, apiKey, model };
+    pendingAgentConfig = {
+      endpoint: endpointUrl.href,
+      apiKey,
+      model,
+      instruction: effectiveInstruction,
+      taskId: selectedTask?.entry_id || ''
+    };
+    if (agentStop) agentStop.disabled = false;
     setAgentStatus(gameStarted ? 'Waiting for UrbanArena to finish loading…' : 'Starting UrbanArena…');
     startEmbeddedGame();
     if (sendAgentMessage('urbanarena:agent-start', pendingAgentConfig)) {
       pendingAgentConfig = null;
       agentForm.elements.apiKey.value = '';
-      setAgentStatus('Agent is taking control and beginning its exploration.');
+      setAgentStatus(selectedTask ? 'Loading the selected task…' : 'Agent is preparing its exploration.');
     }
+  });
+
+  agentStop?.addEventListener('click', () => {
+    pendingAgentConfig = null;
+    sendAgentMessage('urbanarena:agent-stop');
+    if (agentForm) agentForm.elements.apiKey.value = '';
+    setAgentActive(false);
+    setAgentStatus('Agent stopped.');
+  });
+
+  let instructionTimer = 0;
+  agentForm?.elements.instruction?.addEventListener('input', () => {
+    if (!agentActive) return;
+    window.clearTimeout(instructionTimer);
+    instructionTimer = window.setTimeout(() => {
+      sendAgentMessage('urbanarena:agent-instruction', {
+        instruction: String(agentForm.elements.instruction.value || '').trim()
+      });
+      setAgentStatus('Instruction updated for the next agent step.');
+    }, 180);
   });
 
   window.addEventListener('message', (event) => {
     if (event.origin !== window.location.origin || event.source !== gameFrame?.contentWindow) return;
     if (event.data?.type === 'urbanarena:unity-ready') {
       unityReady = true;
+      if (pendingTaskCatalog && sendAgentMessage('urbanarena:task-catalog-request')) {
+        pendingTaskCatalog = false;
+      }
       if (pendingAgentConfig && sendAgentMessage('urbanarena:agent-start', pendingAgentConfig)) {
         pendingAgentConfig = null;
         if (agentForm) agentForm.elements.apiKey.value = '';
-        setAgentStatus('Agent is taking control and beginning its exploration.');
+        setAgentStatus(selectedTask ? 'Loading the selected task…' : 'Agent is preparing its exploration.');
+      }
+      return;
+    }
+    if (event.data?.type === 'urbanarena:task-catalog') {
+      renderTaskCatalog(event.data.catalog);
+      return;
+    }
+    if (event.data?.type === 'urbanarena:task-detail') {
+      const detail = event.data.detail;
+      if (detail?.ok && selectedTask?.entry_id === detail.entry_id && taskPreviewPrompt) {
+        taskPreviewPrompt.textContent = detail.prompt;
       }
       return;
     }
     if (event.data?.type === 'urbanarena:agent-state') {
       if (event.data.state === 'running') {
-        playStage?.classList.add('is-agent-controlled');
-        setAgentStatus('Agent has control and is exploring UrbanArena.');
+        setAgentActive(true);
+        setAgentStatus(selectedTask ? 'Agent has control and is working on the selected task.' : 'Agent has control and is exploring UrbanArena.');
       } else if (event.data.state === 'stopped') {
-        playStage?.classList.remove('is-agent-controlled');
+        setAgentActive(false);
+        setAgentStatus('Agent stopped.');
+      } else if (event.data.state === 'finished') {
+        setAgentActive(false);
+        setAgentStatus('Agent finished the run.');
+      } else if (event.data.state === 'task-loaded') {
+        setAgentStatus('Task loaded through the benchmark task runner.');
       } else if (event.data.state === 'error') {
         setAgentStatus(event.data.message || 'The model endpoint could not be reached.');
       }

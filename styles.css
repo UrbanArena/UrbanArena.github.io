@@ -347,7 +347,7 @@ button { color: inherit; }
   font-weight: 700;
 }
 .agent-fields small { display: block; margin-top: 5px; color: var(--muted); font-family: var(--serif); font-size: .68rem; line-height: 1.35; }
-.agent-fields input {
+.agent-fields input, .agent-fields textarea {
   width: 100%;
   min-height: 39px;
   padding: 8px 10px;
@@ -358,9 +358,40 @@ button { color: inherit; }
   font-family: var(--sans);
   font-size: .75rem;
 }
-.agent-fields input:focus { border-color: #63737d; outline: 1px solid #63737d; outline-offset: 0; }
+.agent-fields textarea { min-height: 74px; line-height: 1.45; resize: vertical; }
+.agent-fields input:focus, .agent-fields textarea:focus { border-color: #63737d; outline: 1px solid #63737d; outline-offset: 0; }
+.agent-instruction-field { grid-column: 1 / -1; }
+.agent-task-tools { margin-top: 10px; display: flex; align-items: center; gap: 12px; }
+.agent-secondary-action, .agent-task-browser button {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid #bfc4c7;
+  background: #fff;
+  color: #424a50;
+  cursor: pointer;
+  font-size: .68rem;
+  font-weight: 700;
+}
+.agent-secondary-action:hover, .agent-secondary-action:focus-visible, .agent-task-browser button:hover, .agent-task-browser button:focus-visible { border-color: #63737d; }
+.agent-task-tools p { margin: 0; color: var(--muted); font-family: var(--serif); font-size: .71rem; }
+.agent-task-browser { margin-top: 12px; padding: 14px; border: 1px solid #d3d6d7; background: #fff; }
+.agent-task-browser[hidden], .agent-task-preview[hidden] { display: none; }
+.agent-task-browser-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.agent-task-browser-heading strong, .agent-task-browser-heading span { display: block; }
+.agent-task-browser-heading strong { color: var(--ink); font-size: .76rem; }
+.agent-task-browser-heading span { margin-top: 3px; color: var(--muted); font-family: var(--serif); font-size: .7rem; }
+.agent-task-groups { margin-top: 13px; display: grid; gap: 7px; }
+.agent-task-level { border-top: 1px solid var(--line); }
+.agent-task-level > summary { padding: 10px 2px; color: var(--ink); cursor: pointer; font-size: .7rem; font-weight: 700; list-style-position: inside; }
+.agent-task-types { padding: 0 0 12px 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 12px; }
+.agent-task-type span { display: block; margin-bottom: 4px; color: #50585e; font-size: .64rem; font-weight: 700; }
+.agent-task-type select { width: 100%; min-height: 36px; border: 1px solid #c8cbce; background: #fff; color: var(--ink); font: .69rem var(--sans); }
+.agent-task-preview { margin-top: 2px; padding: 12px; border-left: 2px solid #2a9d8f; background: #f5f8f6; }
+.agent-task-preview strong { color: var(--ink); font-size: .72rem; }
+.agent-task-preview p { max-height: 124px; margin: 6px 0 10px; overflow: auto; white-space: pre-line; color: #555e64; font-family: var(--serif); font-size: .7rem; line-height: 1.45; }
 .agent-confirmation { margin-top: 12px; display: flex; align-items: center; gap: 14px; }
-.agent-confirmation button {
+.agent-run-actions { display: flex; gap: 7px; }
+.agent-confirmation .agent-run-actions button {
   min-height: 38px;
   padding: 0 18px;
   border: 1px solid #2a9d8f;
@@ -370,7 +401,10 @@ button { color: inherit; }
   font-size: .72rem;
   font-weight: 700;
 }
-.agent-confirmation button:hover, .agent-confirmation button:focus-visible { border-color: #237f75; background: #237f75; }
+.agent-confirmation .agent-run-actions button:hover, .agent-confirmation .agent-run-actions button:focus-visible { border-color: #237f75; background: #237f75; }
+.agent-confirmation .agent-run-actions .agent-stop { border-color: #9b4f4f; background: #fff; color: #8b4141; }
+.agent-confirmation .agent-run-actions .agent-stop:hover, .agent-confirmation .agent-run-actions .agent-stop:focus-visible { border-color: #823737; background: #823737; color: #fff; }
+.agent-confirmation button:disabled { border-color: #d3d5d6 !important; background: #eceeed !important; color: #90969a !important; cursor: default; }
 .agent-confirmation p { margin: 0; color: var(--muted); font-family: var(--serif); font-size: .72rem; line-height: 1.45; }
 .play-note { margin: 12px 0 0; color: #596168; font-family: var(--serif); font-size: .76rem; line-height: 1.5; }
 .play-note strong { color: var(--ink); }
@@ -582,6 +616,7 @@ button { color: inherit; }
   .play-stage { width: calc(100vw - 32px); }
   .play-icon { width: 62px; height: 62px; }
   .agent-fields { grid-template-columns: 1fr; }
+  .agent-task-types { grid-template-columns: 1fr; }
   .demo-reel-heading { grid-template-columns: 1fr; gap: 5px; }
   .demo-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -631,7 +666,9 @@ button { color: inherit; }
   .control-mode-switch { width: 100%; }
   .control-mode { flex: 1 1 50%; }
   .agent-confirmation { align-items: stretch; flex-direction: column; gap: 8px; }
-  .agent-confirmation button { width: 100%; }
+  .agent-run-actions { width: 100%; }
+  .agent-confirmation .agent-run-actions button { flex: 1 1 50%; }
+  .agent-task-tools { align-items: flex-start; flex-direction: column; }
   .institution-logos { margin-top: 36px; }
   .institution { padding: 0 10px; }
   .button-row { gap: 6px; }

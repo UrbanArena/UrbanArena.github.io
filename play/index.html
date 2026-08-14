@@ -35,22 +35,49 @@
       let unityInstance = null;
       let agentConfigured = false;
       let agentRunning = false;
+      let agentStartRequest = null;
 
-      const clearAgent = () => {
-        if (agentRunning) unityInstance?.SendMessage("LLMAgent", "Toggle");
-        agentRunning = false;
+      const clearStoredAgentConfig = () => {
         navigator.serviceWorker?.controller?.postMessage({ type: "urbanarenaAgentClear" });
         agentConfigured = false;
+      };
+
+      const clearAgent = () => {
+        const hadUnity = Boolean(unityInstance);
+        agentStartRequest = null;
+        if (unityInstance) unityInstance.SendMessage("LLMAgent", "StopAgent");
+        agentRunning = false;
+        clearStoredAgentConfig();
+        if (!hadUnity) notifyParent("stopped");
       };
 
       const notifyParent = (state, message) => {
         window.parent.postMessage({ type: "urbanarena:agent-state", state, message }, window.location.origin);
       };
 
+      window.UrbanArenaReceiveAgentState = (state, message) => {
+        if (state === "running") agentRunning = true;
+        if (state === "stopped" || state === "finished") {
+          agentRunning = false;
+          clearStoredAgentConfig();
+        }
+        notifyParent(state, message);
+      };
+
+      const startConfiguredAgent = () => {
+        if (!unityInstance || !agentConfigured || !agentStartRequest) return;
+        const { instruction, taskId } = agentStartRequest;
+        unityInstance.SendMessage("LLMAgent", "SetInstruction", String(instruction || ""));
+        if (taskId) unityInstance.SendMessage("LLMAgent", "LoadTaskAndStart", String(taskId));
+        else unityInstance.SendMessage("LLMAgent", "StartFreeExploration");
+        agentStartRequest = null;
+        canvas.blur();
+      };
+
       window.addEventListener("message", event => {
         if (event.origin !== window.location.origin || event.source !== window.parent) return;
         if (event.data?.type === "urbanarena:agent-start") {
-          const { endpoint, apiKey, model } = event.data;
+          const { endpoint, apiKey, model, instruction, taskId } = event.data;
           let parsed;
           try { parsed = new URL(endpoint); } catch { return notifyParent("error", "The model endpoint URL is invalid."); }
           if (!["http:", "https:"].includes(parsed.protocol) || !apiKey || !model) {
@@ -66,15 +93,26 @@
             model: String(model)
           });
           agentConfigured = true;
-          if (!unityInstance) return;
-          if (!agentRunning) unityInstance.SendMessage("LLMAgent", "Toggle");
-          agentRunning = true;
-          canvas.blur();
-          notifyParent("running");
+          agentStartRequest = {
+            instruction: String(instruction || ""),
+            taskId: String(taskId || "")
+          };
+          startConfiguredAgent();
         }
         if (event.data?.type === "urbanarena:agent-stop") {
           clearAgent();
-          notifyParent("stopped");
+        }
+        if (event.data?.type === "urbanarena:agent-instruction" && unityInstance) {
+          unityInstance.SendMessage("LLMAgent", "SetInstruction", String(event.data.instruction || ""));
+        }
+        if (event.data?.type === "urbanarena:task-catalog-request" && unityInstance) {
+          unityInstance.SendMessage("LLMAgent", "RequestTasks");
+        }
+        if (event.data?.type === "urbanarena:task-detail-request" && unityInstance) {
+          unityInstance.SendMessage("LLMAgent", "RequestTaskDetail", String(event.data.entryId || ""));
+        }
+        if (event.data?.type === "urbanarena:task-clear" && unityInstance) {
+          unityInstance.SendMessage("LLMAgent", "ClearTask");
         }
       });
       window.addEventListener("pagehide", clearAgent);
@@ -120,12 +158,7 @@
           fullscreen.onclick = () => instance.SetFullscreen(1);
           canvas.focus();
           window.parent.postMessage({ type: "urbanarena:unity-ready" }, window.location.origin);
-          if (agentConfigured && !agentRunning) {
-            instance.SendMessage("LLMAgent", "Toggle");
-            agentRunning = true;
-            canvas.blur();
-            notifyParent("running");
-          }
+          startConfiguredAgent();
         }).catch(error => {
           status.textContent = "UrbanArena could not start";
           showBanner(String(error), "error");

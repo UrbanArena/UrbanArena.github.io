@@ -130,9 +130,35 @@
                   <span>Model name</span>
                   <input type="text" name="model" autocomplete="off" spellcheck="false" placeholder="gpt-4o-mini" required>
                 </label>
+                <label class="agent-instruction-field">
+                  <span>Instruction</span>
+                  <textarea name="instruction" rows="3" spellcheck="true">Explore UrbanArena freely. Observe the city, move through different areas, and use the map when useful.</textarea>
+                </label>
+              </div>
+              <div class="agent-task-tools">
+                <button class="agent-secondary-action" type="button" aria-expanded="false" aria-controls="agent-task-browser" data-task-load>Load Tasks</button>
+                <p data-task-selection>No task selected · free exploration</p>
+              </div>
+              <div class="agent-task-browser" id="agent-task-browser" data-task-browser hidden>
+                <div class="agent-task-browser-heading">
+                  <div>
+                    <strong>Benchmark tasks</strong>
+                    <span>Select from the five capability levels used by the evaluation.</span>
+                  </div>
+                  <button type="button" aria-label="Close task browser" data-task-close>Close</button>
+                </div>
+                <div class="agent-task-groups" data-task-groups></div>
+                <div class="agent-task-preview" data-task-preview hidden>
+                  <strong data-task-preview-title></strong>
+                  <p data-task-preview-prompt></p>
+                  <button type="button" data-task-clear>Return to free exploration</button>
+                </div>
               </div>
               <div class="agent-confirmation">
-                <button type="submit">Confirm</button>
+                <div class="agent-run-actions">
+                  <button type="submit" data-agent-confirm>Confirm</button>
+                  <button class="agent-stop" type="button" data-agent-stop disabled>Stop</button>
+                </div>
                 <p data-agent-status role="status" aria-live="polite">The API key is sent only to the API URL you provide.</p>
               </div>
             </form>
@@ -142,6 +168,7 @@
           <div class="control-guide" aria-label="Basic keyboard controls">
             <div><span><kbd>WASD</kbd> Move</span><span><kbd>Shift</kbd> Sprint</span><span><kbd>Space</kbd> Jump</span></div>
             <div><span><kbd>Tab</kbd> Map</span><span><kbd>C</kbd> Pedestrian network</span><span><kbd>N</kbd> Walking navigation</span></div>
+            <div><span><kbd>F</kbd> Load tasks</span></div>
           </div>
           <noscript><p class="play-note">JavaScript is required to launch the interactive sandbox.</p></noscript>
         </section>
