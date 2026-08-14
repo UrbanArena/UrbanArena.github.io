@@ -197,11 +197,8 @@ button { color: inherit; }
   font-weight: 700;
   text-decoration: none;
 }
-.link-button span { color: var(--muted); font-size: .62rem; font-weight: 500; }
 .link-button--dark { color: #fff; background: var(--ink); border-color: var(--ink); }
-.link-button--dark span { color: #c9cdd0; }
 .link-button--play { color: #fff; background: #2a9d8f; border-color: #2a9d8f; }
-.link-button--play span { color: rgba(255, 255, 255, .82); }
 .link-button--play:hover, .link-button--play:focus-visible { background: #237f75; border-color: #237f75; }
 .link-button--disabled { cursor: default; user-select: none; }
 .dataset-links { margin: 12px 0 0 77px; display: flex; flex-wrap: wrap; gap: 10px; }
@@ -219,7 +216,6 @@ button { color: inherit; }
   font-weight: 700;
   text-decoration: none;
 }
-.dataset-link span { color: var(--muted); font-size: .62rem; font-weight: 500; }
 .dataset-link:hover, .dataset-link:focus-visible { border-color: var(--ink); }
 
 .play-online {
