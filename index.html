@@ -12,7 +12,7 @@
   <meta property="og:image" content="https://urbanarena.github.io/assets/figure-1-overview.jpg">
   <title>UrbanArena — Real-Scale Urban Exploration for MLLM Agents</title>
   <link rel="icon" href="assets/urbanarena-favicon.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=20260814f">
+  <link rel="stylesheet" href="styles.css?v=20260814g">
   <script>
     window.coi = {
       shouldRegister: () => sessionStorage.getItem('urbanarenaStartAfterReload') === '1',
@@ -77,6 +77,11 @@
           <a class="link-button link-button--play" href="#play-online">Play Online <span>Unity Web</span></a>
           <span class="link-button link-button--dark link-button--disabled">Paper <span>coming soon</span></span>
           <a class="link-button" href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">Code <span>coming soon</span></a>
+        </div>
+
+        <div class="dataset-links" aria-label="Hong Kong Lands Department open datasets">
+          <a class="dataset-link" href="https://data.gov.hk/en-data/dataset/hk-landsd-openmap-3d-visualisation-map-tile-based-models" target="_blank" rel="noreferrer">3D Visualisation Map <span>3D Tiles</span></a>
+          <a class="dataset-link" href="https://data.gov.hk/en-data/dataset/hk-landsd-openmap-3d-pedestrian-network" target="_blank" rel="noreferrer">3D Pedestrian Network <span>Open data</span></a>
         </div>
 
         <div class="institution-logos" aria-label="Affiliated institutions">
@@ -373,11 +378,14 @@
 
   <footer class="site-footer">
     <div class="shell footer-inner">
-      <div class="footer-brand">
-        <img src="assets/urbanarena-icon.png" alt="" width="28" height="35">
-        <span class="wordmark wordmark--footer" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span>
+      <div class="footer-brand-block">
+        <div class="footer-brand">
+          <img src="assets/urbanarena-icon.png" alt="" width="28" height="35">
+          <span class="wordmark wordmark--footer" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span>
+        </div>
+        <p class="footer-tagline">Real-scale urban exploration for multimodal agents.</p>
+        <p class="data-acknowledgement">UrbanArena gratefully acknowledges the <a href="https://www.landsd.gov.hk/en/" target="_blank" rel="noreferrer">Lands Department</a> for providing the 3D Visualisation Map and 3D Pedestrian Network via <a href="https://data.gov.hk/en/" target="_blank" rel="noreferrer">DATA.GOV.HK</a>, and the Government of the Hong Kong Special Administrative Region’s ownership of the associated intellectual property rights.</p>
       </div>
-      <p>Real-scale urban exploration for multimodal agents.</p>
       <div class="footer-links"><a href="#demos">Demos</a><a href="#urbanarena">Overview</a><a href="#simulation">Simulation</a><a href="#experimental-data">Experimental data</a><a href="#coverage">Coverage</a><a href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">GitHub</a></div>
     </div>
   </footer>
