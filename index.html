@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#f3efe3">
   <meta name="description" content="UrbanArena is a real-scale urban sandbox and benchmark for evaluating multimodal agents through physically grounded exploration of Hong Kong.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="UrbanArena — Real-Scale Urban Exploration for MLLM Agents">
@@ -12,7 +12,7 @@
   <meta property="og:image" content="https://urbanarena.github.io/assets/figure-1-overview.jpg">
   <title>UrbanArena — Real-Scale Urban Exploration for MLLM Agents</title>
   <link rel="icon" href="assets/urbanarena-favicon.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=20260814d">
+  <link rel="stylesheet" href="styles.css?v=20260814e">
   <script>
     window.coi = {
       shouldRegister: () => sessionStorage.getItem('urbanarenaStartAfterReload') === '1',
@@ -22,7 +22,7 @@
     };
   </script>
   <script src="coi-serviceworker.js"></script>
-  <script src="script.js?v=20260814d" defer></script>
+  <script src="script.js?v=20260814e" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -42,7 +42,7 @@
         <a href="#demos">Demos</a>
         <a href="#urbanarena">UrbanArena</a>
         <a href="#simulation">Simulation</a>
-        <a href="#urbanbench">UrbanBench</a>
+        <a href="#experimental-data">Experimental data</a>
         <a href="#coverage">Coverage</a>
         <a class="nav-play" href="#play-online">Play Online</a>
         <a href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">Code</a>
@@ -87,14 +87,17 @@
           <div class="institution"><img class="logo-shu" src="assets/shu.jpg" alt="Shanghai University"></div>
           <div class="institution"><img class="logo-oxford" src="assets/oxford.jpeg" alt="University of Oxford"></div>
         </div>
+      </div>
+    </section>
 
-        <section class="play-online" id="play-online" aria-labelledby="play-online-title" data-play-online>
-          <div class="play-heading">
+    <section class="section play-online" id="play-online" aria-labelledby="play-online-title" data-play-online>
+      <div class="shell">
+          <div class="section-heading play-heading">
+            <p class="section-number">01</p>
             <div>
-              <p class="section-kicker">Interactive Unity sandbox</p>
               <h2 id="play-online-title">Want to explore UrbanArena yourself?</h2>
+              <p>Click the scene to load the complete browser edition here—no download or separate page required.</p>
             </div>
-            <p>Click the scene to load the complete browser edition here—no download or separate page required.</p>
           </div>
 
           <div class="play-stage" data-play-stage>
@@ -143,7 +146,7 @@
               <div class="agent-task-browser" id="agent-task-browser" data-task-browser hidden>
                 <div class="agent-task-browser-heading">
                   <div>
-                    <strong>Benchmark tasks</strong>
+                    <strong>Evaluation tasks</strong>
                     <span>Select from the five capability levels used by the evaluation.</span>
                   </div>
                   <button type="button" aria-label="Close task browser" data-task-close>Close</button>
@@ -170,19 +173,22 @@
             <div><span><kbd>WASD</kbd> Move</span><span><kbd>Shift</kbd> Sprint</span><span><kbd>Space</kbd> Jump</span><span><kbd>Tab</kbd> Map</span><span><kbd>C</kbd> Pedestrian network</span><span><kbd>N</kbd> Walking navigation</span><span><kbd>F</kbd> Load tasks</span></div>
           </div>
           <noscript><p class="play-note">JavaScript is required to launch the interactive sandbox.</p></noscript>
-        </section>
+      </div>
+    </section>
 
-        <dialog class="desktop-notice" data-desktop-notice aria-labelledby="desktop-notice-title">
-          <p class="section-kicker">Desktop required</p>
-          <h2 id="desktop-notice-title">Please continue on a computer.</h2>
-          <p>UrbanArena requires a desktop browser for keyboard, mouse, and Unity controls.</p>
-          <button type="button" data-desktop-notice-close>Close</button>
-        </dialog>
+    <dialog class="desktop-notice" data-desktop-notice aria-labelledby="desktop-notice-title">
+      <h2 id="desktop-notice-title">Please continue on a computer.</h2>
+      <p>UrbanArena requires a desktop browser for keyboard, mouse, and Unity controls.</p>
+      <button type="button" data-desktop-notice-close>Close</button>
+    </dialog>
 
-        <section class="demo-reel" id="demos" aria-labelledby="demos-title">
-          <div class="demo-reel-heading">
-            <p>UrbanArena in action</p>
-            <h2 id="demos-title">Explore, navigate, and interact at city scale.</h2>
+    <section class="section demo-reel" id="demos" aria-labelledby="demos-title">
+      <div class="shell">
+          <div class="section-heading demo-reel-heading">
+            <p class="section-number">02</p>
+            <div>
+              <h2 id="demos-title">Explore, navigate, and interact at city scale.</h2>
+            </div>
           </div>
 
           <div class="demo-grid">
@@ -241,17 +247,13 @@
               <figcaption>Agent Integration</figcaption>
             </figure>
           </div>
-        </section>
-
       </div>
-
     </section>
 
     <section class="section overview" id="urbanarena" aria-labelledby="urbanarena-title">
       <div class="shell section-heading">
-        <p class="section-number">01</p>
+        <p class="section-number">03</p>
         <div>
-          <p class="section-kicker">UrbanArena overview</p>
           <h2 id="urbanarena-title">Hong Kong at real scale.</h2>
           <p>Figure 1 presents the territory-wide sandbox and its two complementary views: embodied exploration at street level and global interaction through the map.</p>
         </div>
@@ -271,9 +273,8 @@
 
     <section class="section simulation" id="simulation" aria-labelledby="simulation-title">
       <div class="shell section-heading">
-        <p class="section-number">02</p>
+        <p class="section-number">04</p>
         <div>
-          <p class="section-kicker">Dynamic simulation</p>
           <h2 id="simulation-title">Diverse urban environments.</h2>
           <p>Figure 2 groups the dynamic simulation by time of day, weather, and pedestrian activity. Select a condition to inspect the original panel from the paper.</p>
         </div>
@@ -299,7 +300,7 @@
             </div>
           </div>
 
-          <div class="figure-group">
+          <div class="figure-group figure-group--pedestrian">
             <span class="group-label">Pedestrian system</span>
             <div class="button-row">
               <button class="figure-button" type="button" aria-pressed="false" data-figure-src="assets/pedestrian-map.jpg" data-figure-title="Network Map" data-figure-caption="The georeferenced pedestrian network is registered to the same city coordinate system.">Network Map</button>
@@ -321,52 +322,50 @@
       </div>
     </section>
 
-    <section class="section benchmark" id="urbanbench" aria-labelledby="benchmark-title">
+    <section class="section experimental-data" id="experimental-data" aria-labelledby="experimental-data-title">
       <div class="shell section-heading">
-        <p class="section-number">03</p>
+        <p class="section-number">05</p>
         <div>
-          <p class="section-kicker">UrbanBench</p>
-          <h2 id="benchmark-title">From seeing a street to adapting within a city.</h2>
-          <p>UrbanBench follows a five-level progression from local understanding to explicit navigation, implicit goal inference, multi-task planning, and interaction with environmental change.</p>
+          <h2 id="experimental-data-title">From seeing a street to adapting within a city.</h2>
+          <p>The experimental data follows a five-level progression from local understanding to explicit navigation, implicit goal inference, multi-task planning, and interaction with environmental change.</p>
         </div>
       </div>
 
-      <figure class="shell paper-figure benchmark-figure">
-        <img src="assets/figure-3.jpg" alt="Five-level UrbanBench task hierarchy shown as a staircase from local environment understanding to dynamic environment interaction" width="1945" height="839">
-        <figcaption><strong>Figure 3.</strong> The five-level task hierarchy in UrbanBench. Thirteen manually verified task types isolate progressively harder forms of urban agency.</figcaption>
+      <figure class="shell paper-figure experimental-data-figure">
+        <img src="assets/figure-3.jpg" alt="Five-level experimental task hierarchy shown as a staircase from local environment understanding to dynamic environment interaction" width="1945" height="839">
+        <figcaption><strong>Figure 3.</strong> The five-level experimental task hierarchy. Thirteen manually verified task types isolate progressively harder forms of urban agency.</figcaption>
       </figure>
 
-      <div class="shell benchmark-summary">
+      <div class="shell experimental-data-summary">
         <div><span>Levels</span><strong>5</strong></div>
         <div><span>Task types</span><strong>13</strong></div>
         <div><span>Interaction horizon</span><strong>100 steps</strong></div>
-        <p>The benchmark exposes only task instructions, first-person observations, physical controls, and map interaction. It does not provide hidden coordinates, remaining distance, or privileged simulator state.</p>
+        <p>The evaluation exposes only task instructions, first-person observations, physical controls, and map interaction. It does not provide hidden coordinates, remaining distance, or privileged simulator state.</p>
       </div>
     </section>
 
     <section class="section coverage" id="coverage" aria-labelledby="coverage-title">
       <div class="shell section-heading">
-        <p class="section-number">04</p>
+        <p class="section-number">06</p>
         <div>
-          <p class="section-kicker">Benchmark coverage</p>
           <h2 id="coverage-title">Coverage and composition.</h2>
-          <p>UrbanBench spans geographically diverse regions of Hong Kong while distributing thirteen task types across five capability levels. These views summarize where tasks occur and how the benchmark is composed.</p>
+          <p>The experimental data spans geographically diverse regions of Hong Kong while distributing thirteen task types across five capability levels. These views summarize where tasks occur and how the evaluation set is composed.</p>
         </div>
       </div>
 
       <div class="shell coverage-figures">
         <figure class="coverage-figure coverage-figure--map">
           <div class="coverage-image-wrap">
-            <img src="assets/figure-4-task-distribution.png" alt="Map of UrbanBench task locations distributed across Hong Kong" width="2200" height="1238" loading="lazy">
+            <img src="assets/figure-4-task-distribution.png" alt="Map of experimental task locations distributed across Hong Kong" width="2200" height="1238" loading="lazy">
           </div>
-          <figcaption><strong>Figure 4.</strong> Spatial distribution of UrbanBench tasks across Hong Kong.</figcaption>
+          <figcaption><strong>Figure 4.</strong> Spatial distribution of experimental tasks across Hong Kong.</figcaption>
         </figure>
 
         <figure class="coverage-figure coverage-figure--composition">
           <div class="coverage-image-wrap">
-            <img src="assets/figure-5-task-composition.png" alt="Bar chart showing the thirteen UrbanBench task types across five capability levels" width="1400" height="1644" loading="lazy">
+            <img src="assets/figure-5-task-composition.png" alt="Bar chart showing the thirteen experimental task types across five capability levels" width="1400" height="1644" loading="lazy">
           </div>
-          <figcaption><strong>Figure 5.</strong> Task composition of UrbanBench across five levels.</figcaption>
+          <figcaption><strong>Figure 5.</strong> Composition of the experimental data across five levels.</figcaption>
         </figure>
       </div>
     </section>
@@ -379,7 +378,7 @@
         <span class="wordmark wordmark--footer" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span>
       </div>
       <p>Real-scale urban exploration for multimodal agents.</p>
-      <div class="footer-links"><a href="#demos">Demos</a><a href="#urbanarena">Overview</a><a href="#simulation">Simulation</a><a href="#urbanbench">UrbanBench</a><a href="#coverage">Coverage</a><a href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">GitHub</a></div>
+      <div class="footer-links"><a href="#demos">Demos</a><a href="#urbanarena">Overview</a><a href="#simulation">Simulation</a><a href="#experimental-data">Experimental data</a><a href="#coverage">Coverage</a><a href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">GitHub</a></div>
     </div>
   </footer>
 

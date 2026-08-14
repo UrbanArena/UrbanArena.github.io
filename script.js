@@ -100,7 +100,7 @@
 
   const requestTaskCatalog = () => {
     pendingTaskCatalog = true;
-    setAgentStatus('Loading the benchmark task library…');
+    setAgentStatus('Loading the experimental task library…');
     startEmbeddedGame();
     if (sendAgentMessage('urbanarena:task-catalog-request')) pendingTaskCatalog = false;
   };
@@ -166,7 +166,7 @@
 
     taskLoad?.classList.add('has-catalog');
     if (taskLoad) taskLoad.textContent = 'Tasks Loaded';
-    setAgentStatus('Choose a benchmark task, or continue with free exploration.');
+    setAgentStatus('Choose an evaluation task, or continue with free exploration.');
   };
 
   const selectControlMode = (mode) => {
@@ -208,7 +208,7 @@
     gameFrame = document.createElement('iframe');
     gameFrame.className = 'play-frame';
     gameFrame.title = 'UrbanArena interactive Unity sandbox';
-    gameFrame.src = 'play/?v=20260814d';
+    gameFrame.src = 'play/?v=20260814e';
     gameFrame.allow = 'fullscreen; gamepad';
     gameFrame.setAttribute('allowfullscreen', '');
     gameFrame.addEventListener('load', () => {
@@ -387,7 +387,7 @@
         setAgentActive(false);
         setAgentStatus('Agent finished the run.');
       } else if (event.data.state === 'task-loaded') {
-        setAgentStatus('Task loaded through the benchmark task runner.');
+        setAgentStatus('Task loaded through the evaluation task runner.');
       } else if (event.data.state === 'error') {
         setAgentStatus(event.data.message || 'The model endpoint could not be reached.');
       }
