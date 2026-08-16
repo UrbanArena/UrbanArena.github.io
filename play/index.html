@@ -10,7 +10,7 @@
     <!-- GitHub Pages cannot emit COOP/COEP response headers. This vendored
          service worker adds them locally so the multithreaded Player keeps
          SharedArrayBuffer, PhysX, and the desktop-equivalent interaction. -->
-    <script src="coi-serviceworker.js"></script>
+    <script src="coi-serviceworker.js?v=20260816b"></script>
   </head>
   <body>
     <main id="unity-container">
@@ -131,7 +131,10 @@
 
       function startUnity() {
         const buildUrl = "Build";
-        const buildVersion = "?v=20260814d";
+        // Keep every Unity bundle revision on a distinct URL. UnityCache is
+        // persistent, so reusing this key after a deployment can otherwise
+        // mix a previous data archive with the new player files.
+        const buildVersion = "?v=20260816b";
         const config = {
         arguments: [],
         dataUrl: buildUrl + "/Web.data.unityweb" + buildVersion,

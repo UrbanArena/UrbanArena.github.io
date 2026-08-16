@@ -64,6 +64,18 @@ if (typeof window === 'undefined') {
             return;
         }
 
+        // The document still needs COOP/COEP headers from this worker, but
+        // Unity's own same-origin binaries must retain their original streamed
+        // responses. Re-wrapping large .unityweb and StreamingAssets responses
+        // can make the browser reject a cache revalidation on GitHub Pages.
+        const url = new URL(r.url);
+        const scopePath = new URL(self.registration.scope).pathname;
+        if (url.origin === self.location.origin && ["Build/", "StreamingAssets/", "TemplateData/"].some(
+            (directory) => url.pathname.startsWith(scopePath + directory)
+        )) {
+            return;
+        }
+
         // Unity's multithreaded WebGL player can issue the request from its
         // dedicated worker rather than the iframe client that supplied the
         // configuration. A sole active play session is therefore unambiguous.
