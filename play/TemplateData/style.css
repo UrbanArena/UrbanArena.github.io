@@ -10,6 +10,7 @@ body { background: radial-gradient(circle at 50% 28%, #19354b 0, #0b1723 54%, #0
 h1 { margin: 20px 0 8px; color: #e9f0f5; font-size: clamp(32px, 5vw, 52px); letter-spacing: -.05em; }
 .urban { background: linear-gradient(90deg, #4c78a8, #2a9d8f, #8b6fb1, #d99a35, #c45d68); -webkit-background-clip: text; background-clip: text; color: transparent; }
 p { margin: 0 0 18px; color: #c7d6e2; }
+.tagline { max-width: 560px; margin-bottom: 10px; color: #a9bdcc; line-height: 1.45; }
 .track { width: min(420px, 72vw); height: 6px; overflow: hidden; border-radius: 99px; background: rgba(255, 255, 255, .14); }
 #progress { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #4c78a8, #2a9d8f); transition: width .15s ease; }
 small { max-width: 440px; margin-top: 16px; color: #8196a8; line-height: 1.5; }

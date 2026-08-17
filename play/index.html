@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=no">
     <meta name="theme-color" content="#0b1723">
     <title>UrbanGround: From Local Perception to Spatial Agency in a Real-Scale City</title>
-    <link rel="icon" href="TemplateData/icon.png">
-    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="icon" href="TemplateData/icon.png?v=20260817c">
+    <link rel="stylesheet" href="TemplateData/style.css?v=20260817c">
     <!-- GitHub Pages cannot emit COOP/COEP response headers. This vendored
          service worker adds them locally so the multithreaded Player keeps
          SharedArrayBuffer, PhysX, and the desktop-equivalent interaction. -->
@@ -16,7 +16,7 @@
     <main id="unity-container">
       <canvas id="unity-canvas" width=960 height=600 tabindex="0" aria-label="UrbanGround Unity game"></canvas>
       <section id="loading" aria-live="polite">
-        <img src="TemplateData/icon.png" alt="" width="112" height="112">
+        <img src="TemplateData/icon.png?v=20260817c" alt="" width="112" height="112">
         <h1><span class="urban">Urban</span>Ground</h1>
         <p id="loading-status">Preparing Unity WebAssembly</p>
         <div class="track"><div id="progress"></div></div>
@@ -36,40 +36,23 @@
       let agentConfigured = false;
       let agentRunning = false;
       let agentStartRequest = null;
-      let parentBridgeNamespace = null;
-
-      const primaryBridgeNamespace = "urbanground";
-      const legacyBridgeNamespace = "urbanarena";
-      const bridgeNamespaces = [primaryBridgeNamespace, legacyBridgeNamespace];
-      const bridgeType = (namespace, suffix) => `${namespace}:${suffix}`;
-      const bridgeNamespaceFor = (type, suffix) => bridgeNamespaces.find(
-        namespace => type === bridgeType(namespace, suffix)
-      ) || null;
-      const acceptParentBridgeMessage = (type, suffix) => {
-        const namespace = bridgeNamespaceFor(type, suffix);
-        if (!namespace) return false;
-        if (!parentBridgeNamespace) parentBridgeNamespace = namespace;
-        return parentBridgeNamespace === namespace;
-      };
+      const bridgeNamespace = "urbanground";
+      const bridgeType = suffix => `${bridgeNamespace}:${suffix}`;
+      const acceptParentBridgeMessage = (type, suffix) => type === bridgeType(suffix);
 
       const postParentBridgeMessage = (suffix, payload) => {
-        const namespaces = parentBridgeNamespace ? [parentBridgeNamespace] : bridgeNamespaces;
-        namespaces.forEach(namespace => {
-          window.parent.postMessage({
-            type: bridgeType(namespace, suffix),
-            ...(payload || {})
-          }, window.location.origin);
-        });
+        window.parent.postMessage({
+          type: bridgeType(suffix),
+          ...(payload || {})
+        }, window.location.origin);
       };
 
       const postServiceWorkerAgentMessage = (action, payload) => {
         const controller = navigator.serviceWorker?.controller;
         if (!controller) return false;
-        bridgeNamespaces.forEach(namespace => {
-          controller.postMessage({
-            type: `${namespace}Agent${action}`,
-            ...(payload || {})
-          });
+        controller.postMessage({
+          type: `${bridgeNamespace}Agent${action}`,
+          ...(payload || {})
         });
         return true;
       };
@@ -101,7 +84,6 @@
         notifyParent(state, message);
       };
       window.UrbanGroundReceiveAgentState = receiveAgentState;
-      window.UrbanArenaReceiveAgentState = receiveAgentState;
 
       const startConfiguredAgent = () => {
         if (!unityInstance || !agentConfigured || !agentStartRequest) return;
@@ -172,7 +154,7 @@
         // Keep every Unity bundle revision on a distinct URL. UnityCache is
         // persistent, so reusing this key after a deployment can otherwise
         // mix a previous data archive with the new player files.
-        const buildVersion = "?v=20260816b";
+        const buildVersion = "?v=20260817c";
         const config = {
         arguments: [],
         dataUrl: buildUrl + "/Web.data.unityweb" + buildVersion,

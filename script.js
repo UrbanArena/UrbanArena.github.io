@@ -47,24 +47,9 @@
   let selectedTask = null;
   let agentActive = false;
   let exitingGame = false;
-  let activeBridgeNamespace = null;
-
-  const primaryBridgeNamespace = 'urbanground';
-  const legacyBridgeNamespace = 'urbanarena';
-  const bridgeNamespaces = [primaryBridgeNamespace, legacyBridgeNamespace];
-  const bridgeType = (namespace, suffix) => `${namespace}:${suffix}`;
-
-  const bridgeNamespaceFor = (type, suffix) => bridgeNamespaces.find(
-    (namespace) => type === bridgeType(namespace, suffix)
-  ) || null;
-
-  const acceptBridgeMessage = (type, suffix) => {
-    const namespace = bridgeNamespaceFor(type, suffix);
-    if (!namespace) return false;
-    if (suffix !== 'unity-ready') return true;
-    if (!activeBridgeNamespace) activeBridgeNamespace = namespace;
-    return activeBridgeNamespace === namespace;
-  };
+  const bridgeNamespace = 'urbanground';
+  const bridgeType = (suffix) => `${bridgeNamespace}:${suffix}`;
+  const acceptBridgeMessage = (type, suffix) => type === bridgeType(suffix);
 
   const capabilityNames = [
     'Local Environment Understanding',
@@ -99,13 +84,10 @@
 
   const postBridgeMessage = (suffix, payload, requireReady = true) => {
     if (!gameFrame?.contentWindow || (requireReady && !unityReady)) return false;
-    const namespaces = activeBridgeNamespace ? [activeBridgeNamespace] : bridgeNamespaces;
-    namespaces.forEach((namespace) => {
-      gameFrame.contentWindow.postMessage({
-        type: bridgeType(namespace, suffix),
-        ...(payload || {})
-      }, window.location.origin);
-    });
+    gameFrame.contentWindow.postMessage({
+      type: bridgeType(suffix),
+      ...(payload || {})
+    }, window.location.origin);
     return true;
   };
 
@@ -217,15 +199,14 @@
   const startEmbeddedGame = () => {
     if (!playStage || gameStarted) return;
     if (!crossOriginIsolated) {
-      sessionStorage.setItem('urbanarenaStartAfterReload', '1');
+      sessionStorage.setItem('urbangroundStartAfterReload', '1');
       window.location.reload();
       return;
     }
 
     gameStarted = true;
     exitingGame = false;
-    activeBridgeNamespace = null;
-    sessionStorage.removeItem('urbanarenaStartAfterReload');
+    sessionStorage.removeItem('urbangroundStartAfterReload');
     playStage.classList.add('is-loading');
     playStart?.setAttribute('aria-busy', 'true');
     if (playExit) playExit.hidden = false;
@@ -233,7 +214,7 @@
     gameFrame = document.createElement('iframe');
     gameFrame.className = 'play-frame';
     gameFrame.title = 'UrbanGround interactive Unity sandbox';
-    gameFrame.src = 'play/?v=20260817b';
+    gameFrame.src = 'play/?v=20260817c';
     gameFrame.allow = 'fullscreen; gamepad';
     gameFrame.setAttribute('allowfullscreen', '');
     gameFrame.addEventListener('load', () => {
@@ -268,7 +249,6 @@
       if (gameFrame !== closingFrame) return;
       gameFrame = null;
       unityReady = false;
-      activeBridgeNamespace = null;
       gameStarted = false;
       playStage?.classList.remove('is-loading', 'is-playing', 'is-agent-controlled');
       playStart?.removeAttribute('aria-busy');
@@ -305,7 +285,7 @@
       const mode = button.dataset.controlMode;
       if (mode === 'agent' && requestDesktop()) return;
       if (mode === 'agent' && !crossOriginIsolated) {
-        sessionStorage.setItem('urbanarenaControlAfterReload', 'agent');
+        sessionStorage.setItem('urbangroundControlAfterReload', 'agent');
         startEmbeddedGame();
         return;
       }
@@ -420,11 +400,11 @@
     }
   });
 
-  if (sessionStorage.getItem('urbanarenaControlAfterReload') === 'agent') {
+  if (sessionStorage.getItem('urbangroundControlAfterReload') === 'agent') {
     selectControlMode('agent');
-    if (crossOriginIsolated) sessionStorage.removeItem('urbanarenaControlAfterReload');
+    if (crossOriginIsolated) sessionStorage.removeItem('urbangroundControlAfterReload');
   }
-  if (sessionStorage.getItem('urbanarenaStartAfterReload') === '1') {
+  if (sessionStorage.getItem('urbangroundStartAfterReload') === '1') {
     document.querySelector('#play-online')?.scrollIntoView({ block: 'center' });
     startEmbeddedGame();
   }

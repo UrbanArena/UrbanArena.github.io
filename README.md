@@ -13,7 +13,7 @@ Then open `http://localhost:4173/`.
 ## Content that remains intentionally provisional
 
 - The arXiv/PDF link is marked as coming soon.
-- `https://github.com/UrbanArena/UrbanArena` is the placeholder code repository.
+- The code and application releases are linked from the project repository.
 - No benchmark result or model ranking is published before the final evaluation is complete.
 
 ## Updating the publication links

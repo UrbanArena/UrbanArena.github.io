@@ -1,8 +1,8 @@
 /*! coi-serviceworker v0.1.7 - Guido Zuidhof and contributors, licensed under MIT */
 let coepCredentialless = false;
 const urbangroundAgentConfigs = new Map();
-const agentConfigureMessageTypes = ["urbangroundAgentConfigure", "urbanarenaAgentConfigure"];
-const agentClearMessageTypes = ["urbangroundAgentClear", "urbanarenaAgentClear"];
+const agentConfigureMessageTypes = ["urbangroundAgentConfigure"];
+const agentClearMessageTypes = ["urbangroundAgentClear"];
 if (typeof window === 'undefined') {
     self.addEventListener("install", () => self.skipWaiting());
     self.addEventListener("activate", (event) => event.waitUntil(self.clients.claim()));
