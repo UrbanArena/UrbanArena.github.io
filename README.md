@@ -23,7 +23,7 @@ Search `index.html` for `coming soon` and replace the paper button and arXiv sta
 ## Deployment
 
 This repository is designed for the special GitHub Pages account repository
-`UrbanArena/UrbanArena.github.io`. GitHub Actions publishes the paper website
+`UrbanGround/UrbanGround.github.io`. GitHub Actions publishes the paper website
 and verifies the Unity WebAssembly game assets under `/play/`. Configure
 **Settings → Pages → Source** as **GitHub Actions**, then
 push the default `main` branch.
