@@ -1,7 +1,7 @@
-# UrbanArena Unity Web deployment
+# UrbanGround Unity Web deployment
 
 This staging directory is generated from `Builds/Web` and is intended to be
-copied into the `play/` directory of the UrbanArena GitHub Pages repository.
+copied into the `play/` directory of the UrbanGround GitHub Pages repository.
 
 The Unity build uses WebAssembly, WebGL 2, multithreading (`SharedArrayBuffer`),
 and the same Unity scene, PhysX collision, Cesium tiles, tasks, and controls as

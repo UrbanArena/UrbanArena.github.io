@@ -1,6 +1,6 @@
-# UrbanArena project page
+# UrbanGround project page
 
-Static project page for **UrbanArena: Evaluating MLLM Agents through Real-Scale Urban Exploration**.
+Static project page for **UrbanGround: From Local Perception to Spatial Agency in a Real-Scale City**.
 
 ## Local preview
 

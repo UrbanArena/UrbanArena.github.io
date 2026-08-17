@@ -4,15 +4,33 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="UrbanArena is a real-scale urban sandbox and benchmark for evaluating multimodal agents through physically grounded exploration of Hong Kong.">
+  <meta name="description" content="UrbanGround is a real-scale urban sandbox and benchmark for studying multimodal agents from local perception to spatial agency in Hong Kong.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="UrbanArena — Real-Scale Urban Exploration for MLLM Agents">
-  <meta property="og:description" content="A physically interactive digital replica of Hong Kong for evaluating multimodal agents from local understanding to long-horizon urban agency.">
+  <meta property="og:site_name" content="UrbanGround">
+  <meta property="og:title" content="UrbanGround: From Local Perception to Spatial Agency in a Real-Scale City">
+  <meta property="og:description" content="A physically interactive digital replica of Hong Kong for studying multimodal agents from local perception to spatial agency.">
   <meta property="og:url" content="https://urbanarena.github.io/">
   <meta property="og:image" content="https://urbanarena.github.io/assets/figure-1-overview.jpg?v=20260814b">
-  <title>UrbanArena — Real-Scale Urban Exploration for MLLM Agents</title>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="UrbanGround: From Local Perception to Spatial Agency in a Real-Scale City">
+  <meta name="twitter:description" content="A physically interactive digital replica of Hong Kong for studying multimodal agents from local perception to spatial agency.">
+  <meta name="twitter:image" content="https://urbanarena.github.io/assets/figure-1-overview.jpg?v=20260814b">
+  <title>UrbanGround: From Local Perception to Spatial Agency in a Real-Scale City</title>
   <link rel="icon" href="assets/urbanarena-favicon.png" type="image/png">
   <link rel="stylesheet" href="styles.css?v=20260814g">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "UrbanGround: From Local Perception to Spatial Agency in a Real-Scale City",
+      "alternateName": "UrbanGround",
+      "url": "https://urbanarena.github.io/",
+      "applicationCategory": "SimulationApplication",
+      "operatingSystem": "Web, macOS, Windows, Linux",
+      "description": "A real-scale urban sandbox and benchmark for studying multimodal agents from local perception to spatial agency in Hong Kong.",
+      "image": "https://urbanarena.github.io/assets/figure-1-overview.jpg?v=20260814b"
+    }
+  </script>
   <script>
     window.coi = {
       shouldRegister: () => sessionStorage.getItem('urbanarenaStartAfterReload') === '1',
@@ -22,16 +40,16 @@
     };
   </script>
   <script src="coi-serviceworker.js"></script>
-  <script src="script.js?v=20260814e" defer></script>
+  <script src="script.js?v=20260817a" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header" data-header>
     <div class="shell header-inner">
-      <a class="brand" href="#top" aria-label="UrbanArena home">
+      <a class="brand" href="#top" aria-label="UrbanGround home">
         <img src="assets/urbanarena-icon.png" alt="" width="22" height="28">
-        <span class="wordmark" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span>
+        <span class="wordmark" aria-label="UrbanGround"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Ground</span></span>
       </a>
 
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -40,7 +58,7 @@
 
       <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
         <a href="#demos">Demos</a>
-        <a href="#urbanarena">UrbanArena</a>
+        <a href="#urbanground">UrbanGround</a>
         <a href="#simulation">Simulation</a>
         <a href="#experimental-data">Experimental data</a>
         <a href="#coverage">Coverage</a>
@@ -54,23 +72,23 @@
     <section class="hero" id="top" aria-labelledby="hero-title">
       <div class="shell hero-copy">
         <div class="title-row">
-          <img class="title-icon" src="assets/urbanarena-icon.png" alt="UrbanArena title emblem" width="62" height="78">
+          <img class="title-icon" src="assets/urbanarena-icon.png" alt="UrbanGround title emblem" width="62" height="78">
           <h1 id="hero-title">
-            <span class="wordmark wordmark--hero" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span><span class="title-colon">:</span>
-            <span class="paper-title">Evaluating MLLM Agents through Real-Scale Urban Exploration</span>
+            <span class="wordmark wordmark--hero" aria-label="UrbanGround"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Ground</span></span><span class="title-colon">:</span>
+            <span class="paper-title">From Local Perception to Spatial Agency in a Real-Scale City</span>
           </h1>
         </div>
 
         <p class="abstract-lede">A real-scale urban sandbox that turns territory-wide 3D geospatial data of Hong Kong into a continuously rendered and physically grounded environment for multimodal agents.</p>
 
-        <div class="app-link-row" aria-label="UrbanArena application downloads">
+        <div class="app-link-row" aria-label="UrbanGround application downloads">
           <div class="platform-icons" aria-label="Available for macOS, Windows, and Linux">
             <img src="assets/platform-apple.svg" alt="macOS" width="28" height="28">
             <img src="assets/platform-windows.svg" alt="Windows" width="28" height="28">
             <img src="assets/platform-linux.svg" alt="Linux" width="28" height="28">
           </div>
-          <span class="app-link-label">UrbanArena App</span>
-          <a href="https://github.com/UrbanArena/UrbanArena/releases" target="_blank" rel="noreferrer">https://github.com/UrbanArena/UrbanArena/releases</a>
+          <span class="app-link-label">UrbanGround App</span>
+          <a href="https://github.com/UrbanArena/UrbanArena/releases" target="_blank" rel="noreferrer">View application releases</a>
         </div>
 
         <div class="project-links" aria-label="Project links">
@@ -100,14 +118,14 @@
           <div class="section-heading play-heading">
             <p class="section-number">01</p>
             <div>
-              <h2 id="play-online-title">Want to explore UrbanArena yourself?</h2>
+              <h2 id="play-online-title">Want to explore UrbanGround yourself?</h2>
               <p>Click the scene to load the complete browser edition here—no download or separate page required.</p>
             </div>
           </div>
 
           <div class="play-stage" data-play-stage>
-            <button class="play-poster" type="button" data-play-start aria-label="Start UrbanArena in this page">
-              <img src="assets/urbanarena-play-preview.jpg" alt="First-person view of Central, Hong Kong in UrbanArena" width="2400" height="1350">
+            <button class="play-poster" type="button" data-play-start aria-label="Start UrbanGround in this page">
+              <img src="assets/urbanarena-play-preview.jpg" alt="First-person view of Central, Hong Kong in UrbanGround" width="2400" height="1350">
               <span class="play-poster-shade"></span>
               <span class="play-icon" aria-hidden="true"><span></span></span>
               <span class="play-cta">Start exploring</span>
@@ -117,7 +135,7 @@
           <div class="control-panel" data-control-panel>
             <div class="control-panel-heading">
               <p>Control mode</p>
-              <div class="control-mode-switch" role="group" aria-label="Choose who controls UrbanArena">
+              <div class="control-mode-switch" role="group" aria-label="Choose who controls UrbanGround">
                 <button class="control-mode is-active" type="button" aria-pressed="true" data-control-mode="human">Human Control</button>
                 <button class="control-mode" type="button" aria-pressed="false" aria-controls="agent-config" data-control-mode="agent">AI Control</button>
               </div>
@@ -133,7 +151,7 @@
                 <label>
                   <span>API Key</span>
                   <input type="password" name="apiKey" autocomplete="off" spellcheck="false" placeholder="sk-…" aria-describedby="api-key-note" required>
-                  <small id="api-key-note">Not recorded or stored by UrbanArena.</small>
+                  <small id="api-key-note">Not recorded or stored by UrbanGround.</small>
                 </label>
                 <label>
                   <span>Model name</span>
@@ -141,7 +159,7 @@
                 </label>
                 <label class="agent-instruction-field" data-agent-instruction-field>
                   <span>Instruction</span>
-                  <textarea name="instruction" rows="3" spellcheck="true">Explore UrbanArena freely. Observe the city, move through different areas, and use the map when useful.</textarea>
+                  <textarea name="instruction" rows="3" spellcheck="true">Explore UrbanGround freely. Observe the city, move through different areas, and use the map when useful.</textarea>
                 </label>
               </div>
               <div class="agent-task-tools">
@@ -183,7 +201,7 @@
 
     <dialog class="desktop-notice" data-desktop-notice aria-labelledby="desktop-notice-title">
       <h2 id="desktop-notice-title">Please continue on a computer.</h2>
-      <p>UrbanArena requires a desktop browser for keyboard, mouse, and Unity controls.</p>
+      <p>UrbanGround requires a desktop browser for keyboard, mouse, and Unity controls.</p>
       <button type="button" data-desktop-notice-close>Close</button>
     </dialog>
 
@@ -246,7 +264,7 @@
               <figcaption>Time-of-Day Control</figcaption>
             </figure>
             <figure class="demo-card">
-              <video autoplay muted loop playsinline preload="none" aria-label="An MLLM agent interacting with UrbanArena">
+              <video autoplay muted loop playsinline preload="none" aria-label="An MLLM agent interacting with UrbanGround">
                 <source data-src="assets/videos/agent-integration.mp4" type="video/mp4">
               </video>
               <figcaption>Agent Integration</figcaption>
@@ -255,17 +273,17 @@
       </div>
     </section>
 
-    <section class="section overview" id="urbanarena" aria-labelledby="urbanarena-title">
+    <section class="section overview" id="urbanground" aria-labelledby="urbanground-title">
       <div class="shell section-heading">
         <p class="section-number">03</p>
         <div>
-          <h2 id="urbanarena-title">Hong Kong at real scale.</h2>
-          <p>UrbanArena is a real-scale urban sandbox built from territory-wide 3D geospatial data. It supports direct first-person play and programmatic control by MLLM agents through the same interface. We release the sandbox on the web and as native builds for macOS, Windows, and Linux. It also includes diverse tasks for studying how multimodal agents perceive and act in a real city.</p>
+          <h2 id="urbanground-title">Hong Kong at real scale.</h2>
+          <p>UrbanGround is a real-scale urban sandbox built from territory-wide 3D geospatial data. It supports direct first-person play and programmatic control by MLLM agents through the same interface. We release the sandbox on the web and as native builds for macOS, Windows, and Linux. It also includes diverse tasks for studying how multimodal agents perceive and act in a real city.</p>
         </div>
       </div>
 
       <figure class="shell paper-figure hero-figure">
-        <img src="assets/figure-1-overview.jpg?v=20260814b" alt="UrbanArena overview showing street-level scenes, first-person and map control, weather, time-of-day, and the pedestrian network" width="3008" height="2433">
+        <img src="assets/figure-1-overview.jpg?v=20260814b" alt="UrbanGround overview showing street-level scenes, first-person and map control, weather, time-of-day, and the pedestrian network" width="3008" height="2433">
       </figure>
 
       <div class="shell contribution-line" aria-label="Project summary">
@@ -380,12 +398,12 @@
       <div class="footer-brand-block">
         <div class="footer-brand">
           <img src="assets/urbanarena-icon.png" alt="" width="28" height="35">
-          <span class="wordmark wordmark--footer" aria-label="UrbanArena"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Arena</span></span>
+          <span class="wordmark wordmark--footer" aria-label="UrbanGround"><span class="u1">U</span><span class="u2">r</span><span class="u3">b</span><span class="u4">a</span><span class="u5">n</span><span>Ground</span></span>
         </div>
         <p class="footer-tagline">Real-scale urban exploration for multimodal agents.</p>
-        <p class="data-acknowledgement">UrbanArena gratefully acknowledges the <a href="https://www.landsd.gov.hk/en/" target="_blank" rel="noreferrer">Lands Department</a> for providing the 3D Visualisation Map and 3D Pedestrian Network via <a href="https://data.gov.hk/en/" target="_blank" rel="noreferrer">DATA.GOV.HK</a>, and the Government of the Hong Kong Special Administrative Region’s ownership of the associated intellectual property rights.</p>
+        <p class="data-acknowledgement">UrbanGround gratefully acknowledges the <a href="https://www.landsd.gov.hk/en/" target="_blank" rel="noreferrer">Lands Department</a> for providing the 3D Visualisation Map and 3D Pedestrian Network via <a href="https://data.gov.hk/en/" target="_blank" rel="noreferrer">DATA.GOV.HK</a>, and the Government of the Hong Kong Special Administrative Region’s ownership of the associated intellectual property rights.</p>
       </div>
-      <div class="footer-links"><a href="#demos">Demos</a><a href="#urbanarena">Overview</a><a href="#simulation">Simulation</a><a href="#experimental-data">Experimental data</a><a href="#coverage">Coverage</a><a href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">GitHub</a></div>
+      <div class="footer-links"><a href="#demos">Demos</a><a href="#urbanground">Overview</a><a href="#simulation">Simulation</a><a href="#experimental-data">Experimental data</a><a href="#coverage">Coverage</a><a href="https://github.com/UrbanArena/UrbanArena" target="_blank" rel="noreferrer">GitHub</a></div>
     </div>
   </footer>
 

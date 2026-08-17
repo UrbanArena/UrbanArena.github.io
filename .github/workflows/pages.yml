@@ -1,4 +1,4 @@
-name: Deploy UrbanArena website
+name: Deploy UrbanGround website
 
 on:
   push:

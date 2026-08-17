@@ -65,7 +65,7 @@
   const requestDesktop = () => {
     if (!isMobileDevice()) return false;
     if (desktopNotice?.showModal) desktopNotice.showModal();
-    else window.alert('UrbanArena requires a desktop computer. Please open this page on a desktop browser to play.');
+    else window.alert('UrbanGround requires a desktop computer. Please open this page on a desktop browser to play.');
     return true;
   };
 
@@ -207,8 +207,8 @@
 
     gameFrame = document.createElement('iframe');
     gameFrame.className = 'play-frame';
-    gameFrame.title = 'UrbanArena interactive Unity sandbox';
-    gameFrame.src = 'play/?v=20260814e';
+    gameFrame.title = 'UrbanGround interactive Unity sandbox';
+    gameFrame.src = 'play/?v=20260817a';
     gameFrame.allow = 'fullscreen; gamepad';
     gameFrame.setAttribute('allowfullscreen', '');
     gameFrame.addEventListener('load', () => {
@@ -321,7 +321,7 @@
       taskId: selectedTask?.entry_id || ''
     };
     if (agentStop) agentStop.disabled = false;
-    setAgentStatus(gameStarted ? 'Waiting for UrbanArena to finish loading…' : 'Starting UrbanArena…');
+    setAgentStatus(gameStarted ? 'Waiting for UrbanGround to finish loading…' : 'Starting UrbanGround…');
     startEmbeddedGame();
     if (sendAgentMessage('urbanarena:agent-start', pendingAgentConfig)) {
       pendingAgentConfig = null;
@@ -379,7 +379,7 @@
     if (event.data?.type === 'urbanarena:agent-state') {
       if (event.data.state === 'running') {
         setAgentActive(true);
-        setAgentStatus(selectedTask ? 'Agent has control and is working on the selected task.' : 'Agent has control and is exploring UrbanArena.');
+        setAgentStatus(selectedTask ? 'Agent has control and is working on the selected task.' : 'Agent has control and is exploring UrbanGround.');
       } else if (event.data.state === 'stopped') {
         setAgentActive(false);
         setAgentStatus('Agent stopped.');

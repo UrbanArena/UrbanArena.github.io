@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=no">
     <meta name="theme-color" content="#0b1723">
-    <title>UrbanArena</title>
+    <title>UrbanGround: From Local Perception to Spatial Agency in a Real-Scale City</title>
     <link rel="icon" href="TemplateData/icon.png">
     <link rel="stylesheet" href="TemplateData/style.css">
     <!-- GitHub Pages cannot emit COOP/COEP response headers. This vendored
@@ -14,10 +14,10 @@
   </head>
   <body>
     <main id="unity-container">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="0" aria-label="UrbanArena Unity game"></canvas>
+      <canvas id="unity-canvas" width=960 height=600 tabindex="0" aria-label="UrbanGround Unity game"></canvas>
       <section id="loading" aria-live="polite">
         <img src="TemplateData/icon.png" alt="" width="112" height="112">
-        <h1><span class="urban">Urban</span>Arena</h1>
+        <h1><span class="urban">Urban</span>Ground</h1>
         <p id="loading-status">Preparing Unity WebAssembly</p>
         <div class="track"><div id="progress"></div></div>
         <small>The first load includes the Unity engine and city sandbox.</small>
@@ -142,8 +142,8 @@
         workerUrl: buildUrl + "/Web.worker.js.unityweb" + buildVersion,
         codeUrl: buildUrl + "/Web.wasm.unityweb" + buildVersion,
         streamingAssetsUrl: "StreamingAssets",
-        companyName: "UrbanArena",
-        productName: "UrbanArena",
+        companyName: "UrbanGround",
+        productName: "UrbanGround",
         productVersion: "1.0",
         autoSyncPersistentDataPath: true,
         showBanner
@@ -154,7 +154,7 @@
         loader.onload = () => createUnityInstance(canvas, config, value => {
           const percentage = Math.round(value * 100);
           progress.style.width = percentage + "%";
-          status.textContent = percentage < 100 ? `Loading UrbanArena · ${percentage}%` : "Starting the sandbox";
+          status.textContent = percentage < 100 ? `Loading UrbanGround · ${percentage}%` : "Starting the sandbox";
         }).then(instance => {
           unityInstance = instance;
           loading.hidden = true;
@@ -164,7 +164,7 @@
           window.parent.postMessage({ type: "urbanarena:unity-ready" }, window.location.origin);
           startConfiguredAgent();
         }).catch(error => {
-          status.textContent = "UrbanArena could not start";
+          status.textContent = "UrbanGround could not start";
           showBanner(String(error), "error");
         });
         loader.onerror = () => showBanner("The Unity loader could not be downloaded.", "error");
