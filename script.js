@@ -47,6 +47,24 @@
   let selectedTask = null;
   let agentActive = false;
   let exitingGame = false;
+  let activeBridgeNamespace = null;
+
+  const primaryBridgeNamespace = 'urbanground';
+  const legacyBridgeNamespace = 'urbanarena';
+  const bridgeNamespaces = [primaryBridgeNamespace, legacyBridgeNamespace];
+  const bridgeType = (namespace, suffix) => `${namespace}:${suffix}`;
+
+  const bridgeNamespaceFor = (type, suffix) => bridgeNamespaces.find(
+    (namespace) => type === bridgeType(namespace, suffix)
+  ) || null;
+
+  const acceptBridgeMessage = (type, suffix) => {
+    const namespace = bridgeNamespaceFor(type, suffix);
+    if (!namespace) return false;
+    if (suffix !== 'unity-ready') return true;
+    if (!activeBridgeNamespace) activeBridgeNamespace = namespace;
+    return activeBridgeNamespace === namespace;
+  };
 
   const capabilityNames = [
     'Local Environment Understanding',
@@ -79,11 +97,19 @@
     playStage?.classList.toggle('is-agent-controlled', active);
   };
 
-  const sendAgentMessage = (type, config) => {
-    if (!gameFrame?.contentWindow || !unityReady) return false;
-    gameFrame.contentWindow.postMessage({ type, ...(config || {}) }, window.location.origin);
+  const postBridgeMessage = (suffix, payload, requireReady = true) => {
+    if (!gameFrame?.contentWindow || (requireReady && !unityReady)) return false;
+    const namespaces = activeBridgeNamespace ? [activeBridgeNamespace] : bridgeNamespaces;
+    namespaces.forEach((namespace) => {
+      gameFrame.contentWindow.postMessage({
+        type: bridgeType(namespace, suffix),
+        ...(payload || {})
+      }, window.location.origin);
+    });
     return true;
   };
+
+  const sendAgentMessage = (suffix, config) => postBridgeMessage(suffix, config);
 
   const setBenchmarkMode = (active) => {
     if (agentInstructionField) agentInstructionField.hidden = active;
@@ -95,14 +121,14 @@
     if (taskSelection) taskSelection.textContent = 'No task selected · free exploration';
     if (taskPreview) taskPreview.hidden = true;
     taskGroups?.querySelectorAll('select').forEach((select) => { select.value = ''; });
-    if (notifyUnity) sendAgentMessage('urbanarena:task-clear');
+    if (notifyUnity) sendAgentMessage('task-clear');
   };
 
   const requestTaskCatalog = () => {
     pendingTaskCatalog = true;
     setAgentStatus('Loading the experimental task library…');
     startEmbeddedGame();
-    if (sendAgentMessage('urbanarena:task-catalog-request')) pendingTaskCatalog = false;
+    if (sendAgentMessage('task-catalog-request')) pendingTaskCatalog = false;
   };
 
   const renderTaskCatalog = (catalog) => {
@@ -152,7 +178,7 @@
           if (taskPreview) taskPreview.hidden = false;
           if (taskPreviewTitle) taskPreviewTitle.textContent = `${chosen.display_id || chosen.entry_id} · ${chosen.type}`;
           if (taskPreviewPrompt) taskPreviewPrompt.textContent = 'Loading task instructions…';
-          sendAgentMessage('urbanarena:task-detail-request', { entryId: chosen.entry_id });
+          sendAgentMessage('task-detail-request', { entryId: chosen.entry_id });
           setAgentStatus('Task selected. Confirm to load it and start the agent.');
         });
 
@@ -179,9 +205,7 @@
     if (agentForm) agentForm.hidden = !useAgent;
 
     if (!useAgent) {
-      if (gameFrame?.contentWindow) {
-        gameFrame.contentWindow.postMessage({ type: 'urbanarena:agent-stop' }, window.location.origin);
-      }
+      if (gameFrame?.contentWindow && !exitingGame) postBridgeMessage('agent-stop', null, false);
       pendingAgentConfig = null;
       setAgentActive(false);
       agentForm?.reset();
@@ -200,6 +224,7 @@
 
     gameStarted = true;
     exitingGame = false;
+    activeBridgeNamespace = null;
     sessionStorage.removeItem('urbanarenaStartAfterReload');
     playStage.classList.add('is-loading');
     playStart?.setAttribute('aria-busy', 'true');
@@ -208,7 +233,7 @@
     gameFrame = document.createElement('iframe');
     gameFrame.className = 'play-frame';
     gameFrame.title = 'UrbanGround interactive Unity sandbox';
-    gameFrame.src = 'play/?v=20260817a';
+    gameFrame.src = 'play/?v=20260817b';
     gameFrame.allow = 'fullscreen; gamepad';
     gameFrame.setAttribute('allowfullscreen', '');
     gameFrame.addEventListener('load', () => {
@@ -224,7 +249,7 @@
     if (!gameStarted || exitingGame) return;
     exitingGame = true;
     const closingFrame = gameFrame;
-    closingFrame?.contentWindow?.postMessage({ type: 'urbanarena:agent-stop' }, window.location.origin);
+    postBridgeMessage('agent-stop', null, false);
     pendingAgentConfig = null;
     pendingTaskCatalog = false;
     setAgentActive(false);
@@ -243,6 +268,7 @@
       if (gameFrame !== closingFrame) return;
       gameFrame = null;
       unityReady = false;
+      activeBridgeNamespace = null;
       gameStarted = false;
       playStage?.classList.remove('is-loading', 'is-playing', 'is-agent-controlled');
       playStart?.removeAttribute('aria-busy');
@@ -323,7 +349,7 @@
     if (agentStop) agentStop.disabled = false;
     setAgentStatus(gameStarted ? 'Waiting for UrbanGround to finish loading…' : 'Starting UrbanGround…');
     startEmbeddedGame();
-    if (sendAgentMessage('urbanarena:agent-start', pendingAgentConfig)) {
+    if (sendAgentMessage('agent-start', pendingAgentConfig)) {
       pendingAgentConfig = null;
       agentForm.elements.apiKey.value = '';
       setAgentStatus(selectedTask ? 'Loading the selected task…' : 'Agent is preparing its exploration.');
@@ -332,7 +358,7 @@
 
   agentStop?.addEventListener('click', () => {
     pendingAgentConfig = null;
-    sendAgentMessage('urbanarena:agent-stop');
+    sendAgentMessage('agent-stop');
     if (agentForm) agentForm.elements.apiKey.value = '';
     setAgentActive(false);
     setAgentStatus('Agent stopped.');
@@ -343,7 +369,7 @@
     if (!agentActive || selectedTask) return;
     window.clearTimeout(instructionTimer);
     instructionTimer = window.setTimeout(() => {
-      sendAgentMessage('urbanarena:agent-instruction', {
+      sendAgentMessage('agent-instruction', {
         instruction: String(agentForm.elements.instruction.value || '').trim()
       });
       setAgentStatus('Instruction updated for the next agent step.');
@@ -353,30 +379,30 @@
   window.addEventListener('message', (event) => {
     if (event.origin !== window.location.origin || event.source !== gameFrame?.contentWindow) return;
     if (exitingGame) return;
-    if (event.data?.type === 'urbanarena:unity-ready') {
+    if (acceptBridgeMessage(event.data?.type, 'unity-ready')) {
       unityReady = true;
-      if (pendingTaskCatalog && sendAgentMessage('urbanarena:task-catalog-request')) {
+      if (pendingTaskCatalog && sendAgentMessage('task-catalog-request')) {
         pendingTaskCatalog = false;
       }
-      if (pendingAgentConfig && sendAgentMessage('urbanarena:agent-start', pendingAgentConfig)) {
+      if (pendingAgentConfig && sendAgentMessage('agent-start', pendingAgentConfig)) {
         pendingAgentConfig = null;
         if (agentForm) agentForm.elements.apiKey.value = '';
         setAgentStatus(selectedTask ? 'Loading the selected task…' : 'Agent is preparing its exploration.');
       }
       return;
     }
-    if (event.data?.type === 'urbanarena:task-catalog') {
+    if (acceptBridgeMessage(event.data?.type, 'task-catalog')) {
       renderTaskCatalog(event.data.catalog);
       return;
     }
-    if (event.data?.type === 'urbanarena:task-detail') {
+    if (acceptBridgeMessage(event.data?.type, 'task-detail')) {
       const detail = event.data.detail;
       if (detail?.ok && selectedTask?.entry_id === detail.entry_id && taskPreviewPrompt) {
         taskPreviewPrompt.textContent = detail.prompt;
       }
       return;
     }
-    if (event.data?.type === 'urbanarena:agent-state') {
+    if (acceptBridgeMessage(event.data?.type, 'agent-state')) {
       if (event.data.state === 'running') {
         setAgentActive(true);
         setAgentStatus(selectedTask ? 'Agent has control and is working on the selected task.' : 'Agent has control and is exploring UrbanGround.');

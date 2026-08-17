@@ -10,7 +10,7 @@
     <!-- GitHub Pages cannot emit COOP/COEP response headers. This vendored
          service worker adds them locally so the multithreaded Player keeps
          SharedArrayBuffer, PhysX, and the desktop-equivalent interaction. -->
-    <script src="coi-serviceworker.js?v=20260816b"></script>
+    <script src="coi-serviceworker.js?v=20260817b"></script>
   </head>
   <body>
     <main id="unity-container">
@@ -36,9 +36,46 @@
       let agentConfigured = false;
       let agentRunning = false;
       let agentStartRequest = null;
+      let parentBridgeNamespace = null;
+
+      const primaryBridgeNamespace = "urbanground";
+      const legacyBridgeNamespace = "urbanarena";
+      const bridgeNamespaces = [primaryBridgeNamespace, legacyBridgeNamespace];
+      const bridgeType = (namespace, suffix) => `${namespace}:${suffix}`;
+      const bridgeNamespaceFor = (type, suffix) => bridgeNamespaces.find(
+        namespace => type === bridgeType(namespace, suffix)
+      ) || null;
+      const acceptParentBridgeMessage = (type, suffix) => {
+        const namespace = bridgeNamespaceFor(type, suffix);
+        if (!namespace) return false;
+        if (!parentBridgeNamespace) parentBridgeNamespace = namespace;
+        return parentBridgeNamespace === namespace;
+      };
+
+      const postParentBridgeMessage = (suffix, payload) => {
+        const namespaces = parentBridgeNamespace ? [parentBridgeNamespace] : bridgeNamespaces;
+        namespaces.forEach(namespace => {
+          window.parent.postMessage({
+            type: bridgeType(namespace, suffix),
+            ...(payload || {})
+          }, window.location.origin);
+        });
+      };
+
+      const postServiceWorkerAgentMessage = (action, payload) => {
+        const controller = navigator.serviceWorker?.controller;
+        if (!controller) return false;
+        bridgeNamespaces.forEach(namespace => {
+          controller.postMessage({
+            type: `${namespace}Agent${action}`,
+            ...(payload || {})
+          });
+        });
+        return true;
+      };
 
       const clearStoredAgentConfig = () => {
-        navigator.serviceWorker?.controller?.postMessage({ type: "urbanarenaAgentClear" });
+        postServiceWorkerAgentMessage("Clear");
         agentConfigured = false;
       };
 
@@ -52,10 +89,10 @@
       };
 
       const notifyParent = (state, message) => {
-        window.parent.postMessage({ type: "urbanarena:agent-state", state, message }, window.location.origin);
+        postParentBridgeMessage("agent-state", { state, message });
       };
 
-      window.UrbanArenaReceiveAgentState = (state, message) => {
+      const receiveAgentState = (state, message) => {
         if (state === "running") agentRunning = true;
         if (state === "stopped" || state === "finished") {
           agentRunning = false;
@@ -63,6 +100,8 @@
         }
         notifyParent(state, message);
       };
+      window.UrbanGroundReceiveAgentState = receiveAgentState;
+      window.UrbanArenaReceiveAgentState = receiveAgentState;
 
       const startConfiguredAgent = () => {
         if (!unityInstance || !agentConfigured || !agentStartRequest) return;
@@ -76,7 +115,7 @@
 
       window.addEventListener("message", event => {
         if (event.origin !== window.location.origin || event.source !== window.parent) return;
-        if (event.data?.type === "urbanarena:agent-start") {
+        if (acceptParentBridgeMessage(event.data?.type, "agent-start")) {
           const { endpoint, apiKey, model, instruction, taskId } = event.data;
           let parsed;
           try { parsed = new URL(endpoint); } catch { return notifyParent("error", "The model endpoint URL is invalid."); }
@@ -86,8 +125,7 @@
           if (!navigator.serviceWorker?.controller) {
             return notifyParent("error", "The secure browser runtime is not ready. Reload the page and try again.");
           }
-          navigator.serviceWorker.controller.postMessage({
-            type: "urbanarenaAgentConfigure",
+          postServiceWorkerAgentMessage("Configure", {
             endpoint: parsed.href,
             apiKey: String(apiKey),
             model: String(model)
@@ -99,19 +137,19 @@
           };
           startConfiguredAgent();
         }
-        if (event.data?.type === "urbanarena:agent-stop") {
+        if (acceptParentBridgeMessage(event.data?.type, "agent-stop")) {
           clearAgent();
         }
-        if (event.data?.type === "urbanarena:agent-instruction" && unityInstance) {
+        if (acceptParentBridgeMessage(event.data?.type, "agent-instruction") && unityInstance) {
           unityInstance.SendMessage("LLMAgent", "SetInstruction", String(event.data.instruction || ""));
         }
-        if (event.data?.type === "urbanarena:task-catalog-request" && unityInstance) {
+        if (acceptParentBridgeMessage(event.data?.type, "task-catalog-request") && unityInstance) {
           unityInstance.SendMessage("LLMAgent", "RequestTasks");
         }
-        if (event.data?.type === "urbanarena:task-detail-request" && unityInstance) {
+        if (acceptParentBridgeMessage(event.data?.type, "task-detail-request") && unityInstance) {
           unityInstance.SendMessage("LLMAgent", "RequestTaskDetail", String(event.data.entryId || ""));
         }
-        if (event.data?.type === "urbanarena:task-clear" && unityInstance) {
+        if (acceptParentBridgeMessage(event.data?.type, "task-clear") && unityInstance) {
           unityInstance.SendMessage("LLMAgent", "ClearTask");
         }
       });
@@ -161,7 +199,7 @@
           fullscreen.hidden = false;
           fullscreen.onclick = () => instance.SetFullscreen(1);
           canvas.focus();
-          window.parent.postMessage({ type: "urbanarena:unity-ready" }, window.location.origin);
+          postParentBridgeMessage("unity-ready");
           startConfiguredAgent();
         }).catch(error => {
           status.textContent = "UrbanGround could not start";

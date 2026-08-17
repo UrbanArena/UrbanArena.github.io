@@ -1,6 +1,8 @@
 /*! coi-serviceworker v0.1.7 - Guido Zuidhof and contributors, licensed under MIT */
 let coepCredentialless = false;
-const urbanarenaAgentConfigs = new Map();
+const urbangroundAgentConfigs = new Map();
+const agentConfigureMessageTypes = ["urbangroundAgentConfigure", "urbanarenaAgentConfigure"];
+const agentClearMessageTypes = ["urbangroundAgentClear", "urbanarenaAgentClear"];
 if (typeof window === 'undefined') {
     self.addEventListener("install", () => self.skipWaiting());
     self.addEventListener("activate", (event) => event.waitUntil(self.clients.claim()));
@@ -19,25 +21,25 @@ if (typeof window === 'undefined') {
                 });
         } else if (ev.data.type === "coepCredentialless") {
             coepCredentialless = ev.data.value;
-        } else if (ev.data.type === "urbanarenaAgentConfigure") {
+        } else if (agentConfigureMessageTypes.includes(ev.data.type)) {
             const { endpoint, apiKey, model } = ev.data;
             try {
                 const parsed = new URL(endpoint), sourceOrigin = new URL(ev.source.url).origin;
                 if ((parsed.protocol === "https:" || parsed.protocol === "http:") && apiKey && model &&
                     sourceOrigin === self.location.origin && /\/play\/?$/.test(new URL(ev.source.url).pathname)) {
-                    urbanarenaAgentConfigs.set(ev.source.id, { endpoint: parsed.href, apiKey, model });
+                    urbangroundAgentConfigs.set(ev.source.id, { endpoint: parsed.href, apiKey, model });
                 }
             } catch (_) { }
-        } else if (ev.data.type === "urbanarenaAgentClear") {
-            const config = urbanarenaAgentConfigs.get(ev.source.id);
+        } else if (agentClearMessageTypes.includes(ev.data.type)) {
+            const config = urbangroundAgentConfigs.get(ev.source.id);
             if (config) {
                 config.apiKey = "";
-                urbanarenaAgentConfigs.delete(ev.source.id);
+                urbangroundAgentConfigs.delete(ev.source.id);
             }
         }
     });
 
-    async function forwardUrbanArenaAgentRequest(request, config) {
+    async function forwardUrbanGroundAgentRequest(request, config) {
         const headers = new Headers(request.headers);
         headers.set("Content-Type", "application/json");
         headers.set("Authorization", "Bearer " + config.apiKey);
@@ -79,10 +81,10 @@ if (typeof window === 'undefined') {
         // Unity's multithreaded WebGL player can issue the request from its
         // dedicated worker rather than the iframe client that supplied the
         // configuration. A sole active play session is therefore unambiguous.
-        const agentConfig = urbanarenaAgentConfigs.get(event.clientId) ||
-            (urbanarenaAgentConfigs.size === 1 ? urbanarenaAgentConfigs.values().next().value : null);
+        const agentConfig = urbangroundAgentConfigs.get(event.clientId) ||
+            (urbangroundAgentConfigs.size === 1 ? urbangroundAgentConfigs.values().next().value : null);
         if (agentConfig && r.method === "POST" && r.url === "https://api.openai.com/v1/chat/completions") {
-            event.respondWith(forwardUrbanArenaAgentRequest(r, agentConfig));
+            event.respondWith(forwardUrbanGroundAgentRequest(r, agentConfig));
             return;
         }
 
