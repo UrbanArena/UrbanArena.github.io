@@ -66,6 +66,20 @@ if (typeof window === 'undefined') {
             return;
         }
 
+        // The root worker controls the embedded /play/ document as well as
+        // the project page. Unity's large same-origin binaries already meet
+        // COEP, and must keep their native streamed responses. Re-wrapping
+        // these bodies can make GitHub Pages cache revalidation fail midway.
+        const url = new URL(r.url);
+        const playPath = new URL("play/", self.registration.scope).pathname;
+        const nativeResponsePaths = ["Build/", "StreamingAssets/", "TemplateData/"]
+            .map((directory) => playPath + directory);
+        if (url.origin === self.location.origin && nativeResponsePaths.some(
+            (path) => url.pathname.startsWith(path)
+        )) {
+            return;
+        }
+
         // Unity's multithreaded WebGL player can issue the request from its
         // dedicated worker rather than the iframe client that supplied the
         // configuration. A sole active play session is therefore unambiguous.
@@ -103,7 +117,10 @@ if (typeof window === 'undefined') {
                         headers: newHeaders,
                     });
                 })
-                .catch((e) => console.error(e))
+                .catch((error) => {
+                    console.error(error);
+                    throw error;
+                })
         );
     });
 
@@ -134,6 +151,23 @@ if (typeof window === 'undefined') {
         const coepHasFailed = window.sessionStorage.getItem("coiCoepHasFailed");
 
         if (controlling) {
+            // A controlled page would normally return before registering the
+            // newly versioned script below. Explicitly adopt it so existing
+            // visitors do not remain pinned to the old root worker.
+            let reloadingForControllerChange = false;
+            n.serviceWorker.addEventListener("controllerchange", () => {
+                if (reloadingForControllerChange) return;
+                reloadingForControllerChange = true;
+                coi.doReload("controllerchange");
+            });
+            const currentScriptUrl = window.document.currentScript.src;
+            n.serviceWorker.getRegistration().then((registration) => {
+                if (registration && registration.active &&
+                    registration.active.scriptURL !== currentScriptUrl) {
+                    return n.serviceWorker.register(currentScriptUrl);
+                }
+            }).catch((error) => console.error("COOP/COEP Service Worker update failed:", error));
+
             // Reload only on the first failure.
             const reloadToDegrade = coi.coepDegrade() && !(
                 coepDegrading || window.crossOriginIsolated

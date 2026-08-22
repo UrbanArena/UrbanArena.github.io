@@ -115,7 +115,10 @@ if (typeof window === 'undefined') {
                         headers: newHeaders,
                     });
                 })
-                .catch((e) => console.error(e))
+                .catch((error) => {
+                    console.error(error);
+                    throw error;
+                })
         );
     });
 
@@ -146,6 +149,22 @@ if (typeof window === 'undefined') {
         const coepHasFailed = window.sessionStorage.getItem("coiCoepHasFailed");
 
         if (controlling) {
+            // Ensure a directly opened /play/ page also adopts a newly
+            // versioned worker instead of remaining pinned to an old script.
+            let reloadingForControllerChange = false;
+            n.serviceWorker.addEventListener("controllerchange", () => {
+                if (reloadingForControllerChange) return;
+                reloadingForControllerChange = true;
+                coi.doReload("controllerchange");
+            });
+            const currentScriptUrl = window.document.currentScript.src;
+            n.serviceWorker.getRegistration().then((registration) => {
+                if (registration && registration.active &&
+                    registration.active.scriptURL !== currentScriptUrl) {
+                    return n.serviceWorker.register(currentScriptUrl);
+                }
+            }).catch((error) => console.error("COOP/COEP Service Worker update failed:", error));
+
             // Reload only on the first failure.
             const reloadToDegrade = coi.coepDegrade() && !(
                 coepDegrading || window.crossOriginIsolated

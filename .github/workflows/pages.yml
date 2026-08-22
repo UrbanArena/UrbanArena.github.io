@@ -44,3 +44,34 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify published Service Worker and Unity archive
+        shell: bash
+        env:
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          set -euo pipefail
+          site="${SITE_URL%/}"
+          remote_sw="$(mktemp)"
+          remote_data="$(mktemp)"
+          trap 'rm -f "$remote_sw" "$remote_data"' EXIT
+
+          published=false
+          for attempt in $(seq 1 24); do
+            if curl -fsSL --retry 2 \
+                -H 'Cache-Control: no-cache' \
+                "$site/coi-serviceworker.js?deploy=$GITHUB_SHA" \
+                -o "$remote_sw" &&
+                cmp -s coi-serviceworker.js "$remote_sw"; then
+              published=true
+              break
+            fi
+            sleep 5
+          done
+          test "$published" = true
+
+          curl -fsSL --retry 5 \
+            "$site/play/Build/Web.data.unityweb?deploy=$GITHUB_SHA" \
+            -o "$remote_data"
+          test "$(sha256sum "$remote_data" | cut -d ' ' -f 1)" = \
+               "$(sha256sum play/Build/Web.data.unityweb | cut -d ' ' -f 1)"

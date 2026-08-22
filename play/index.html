@@ -10,7 +10,7 @@
     <!-- GitHub Pages cannot emit COOP/COEP response headers. This vendored
          service worker adds them locally so the multithreaded Player keeps
          SharedArrayBuffer, PhysX, and the desktop-equivalent interaction. -->
-    <script src="coi-serviceworker.js?v=20260817b"></script>
+    <script src="coi-serviceworker.js?v=20260822a"></script>
   </head>
   <body>
     <main id="unity-container">
@@ -32,6 +32,8 @@
       const progress = document.querySelector("#progress");
       const warning = document.querySelector("#warning");
       const fullscreen = document.querySelector("#fullscreen");
+      const unityStartupRetryKey = "urbangroundUnityStartupRetryCount";
+      const maxUnityStartupRetries = 2;
       let unityInstance = null;
       let agentConfigured = false;
       let agentRunning = false;
@@ -145,6 +147,32 @@
         if (type !== "error") setTimeout(() => item.remove(), 6000);
       }
 
+      function isUnityDataLoadFailure(error) {
+        const message = String(error || "");
+        return message.includes("reading 'subarray'") ||
+          message.includes('reading "subarray"') ||
+          message.includes("Failed to download file") ||
+          message.includes("Failed to fetch") ||
+          message.includes("Invalid binary data file");
+      }
+
+      function scheduleUnityStartupRetry(error) {
+        if (!isUnityDataLoadFailure(error)) return false;
+
+        const retryCount = Number(sessionStorage.getItem(unityStartupRetryKey) || "0");
+        if (retryCount >= maxUnityStartupRetries) return false;
+
+        const nextRetry = retryCount + 1;
+        sessionStorage.setItem(unityStartupRetryKey, String(nextRetry));
+        status.textContent = `Retrying the Unity data download · ${nextRetry}/${maxUnityStartupRetries}`;
+        setTimeout(() => {
+          const retryUrl = new URL(window.location.href);
+          retryUrl.searchParams.set("unity-retry", String(Date.now()));
+          window.location.replace(retryUrl.href);
+        }, 900);
+        return true;
+      }
+
       if (!crossOriginIsolated) {
         showBanner("Preparing the secure browser runtime. The page may reload once.", "info");
       }
@@ -154,7 +182,7 @@
         // Keep every Unity bundle revision on a distinct URL. UnityCache is
         // persistent, so reusing this key after a deployment can otherwise
         // mix a previous data archive with the new player files.
-        const buildVersion = "?v=20260817c";
+        const buildVersion = "?v=20260822a";
         const config = {
         arguments: [],
         dataUrl: buildUrl + "/Web.data.unityweb" + buildVersion,
@@ -165,6 +193,9 @@
         companyName: "UrbanGround",
         productName: "UrbanGround",
         productVersion: "1.0",
+        // Build URLs are immutable within a deployment. Avoid revalidating a
+        // valid UnityCache entry through the Service Worker on every launch.
+        cacheControl: url => url.includes(buildVersion) ? "immutable" : "no-store",
         autoSyncPersistentDataPath: true,
         showBanner
         };
@@ -176,6 +207,7 @@
           progress.style.width = percentage + "%";
           status.textContent = percentage < 100 ? `Loading UrbanGround · ${percentage}%` : "Starting the sandbox";
         }).then(instance => {
+          sessionStorage.removeItem(unityStartupRetryKey);
           unityInstance = instance;
           loading.hidden = true;
           fullscreen.hidden = false;
@@ -184,8 +216,14 @@
           postParentBridgeMessage("unity-ready");
           startConfiguredAgent();
         }).catch(error => {
+          if (scheduleUnityStartupRetry(error)) return;
+
+          const dataLoadFailure = isUnityDataLoadFailure(error);
+          sessionStorage.removeItem(unityStartupRetryKey);
           status.textContent = "UrbanGround could not start";
-          showBanner(String(error), "error");
+          showBanner(dataLoadFailure
+            ? "The Unity data package could not be downloaded after automatic retries. Check the connection and reload this page."
+            : String(error), "error");
         });
         loader.onerror = () => showBanner("The Unity loader could not be downloaded.", "error");
         document.body.appendChild(loader);
